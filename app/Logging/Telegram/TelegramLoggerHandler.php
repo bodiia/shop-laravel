@@ -11,6 +11,7 @@ use Monolog\Logger;
 final class TelegramLoggerHandler extends AbstractProcessingHandler
 {
     protected string $token;
+
     protected int $channel;
 
     public function __construct(array $config)
