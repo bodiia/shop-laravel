@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Logging\Telegram;
 
+use App\Exceptions\TelegramBotException;
 use App\Services\Telegram\TelegramBot;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -26,10 +27,16 @@ final class TelegramLoggerHandler extends AbstractProcessingHandler
 
     protected function write(array $record): void
     {
-        TelegramBot::sendMessage(
-            $this->token,
-            $this->channel,
-            $record['formatted']
-        );
+        try {
+            TelegramBot::sendMessage(
+                $this->token,
+                $this->channel,
+                $record['formatted']
+            );
+        } catch (TelegramBotException $exception) {
+            logger()
+                ->channel('stack')
+                ->debug('TelegramLogger ' . $exception->getMessage());
+        }
     }
 }

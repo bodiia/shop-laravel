@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Telegram;
 
 use App\Exceptions\TelegramBotException;
+use Exception;
 use Illuminate\Support\Facades\Http;
 
 final class TelegramBot
@@ -26,12 +27,12 @@ final class TelegramBot
 
         try {
             $response = Http::post($url, $options)->json();
-
-            if (isset($response['error_code'])) {
-                throw new TelegramBotException($response['description']);
-            }
-        } catch (\Exception) {
+        } catch (Exception) {
             return false;
+        }
+
+        if (isset($response['error_code'])) {
+            throw new TelegramBotException($response['description']);
         }
 
         return true;
