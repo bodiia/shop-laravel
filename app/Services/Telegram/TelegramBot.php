@@ -9,20 +9,23 @@ use Illuminate\Support\Facades\Http;
 
 final class TelegramBot
 {
-    public const TELEGRAM_API = 'https://api.telegram.org/bot';
+    private const TELEGRAM_API = 'https://api.telegram.org/bot';
+
+    private const PARSE_MODE_MARKDOWN = 'MarkdownV2';
 
     private const SEND_MESSAGE_METHOD = '/sendMessage';
 
     public static function sendMessage(string $token, int $channel, string $message): bool
     {
-        $credentials = [
+        $options = [
             'chat_id' => $channel,
             'text' => $message,
+            'parse_mode' => self::PARSE_MODE_MARKDOWN,
         ];
         $url = self::TELEGRAM_API . $token . self::SEND_MESSAGE_METHOD;
 
         try {
-            $response = Http::post($url, $credentials)->json();
+            $response = Http::post($url, $options)->json();
 
             if (isset($response['error_code'])) {
                 throw new TelegramBotException($response['description']);
