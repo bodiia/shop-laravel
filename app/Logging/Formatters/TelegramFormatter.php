@@ -15,7 +15,6 @@ final class TelegramFormatter
             $handler->setFormatter(new LineFormatter(
                 format: '`[%datetime%] %channel%.%level_name%: %message%`',
                 dateFormat: 'Y-m-d - H:i:s',
-                allowInlineLineBreaks: true
             ));
         }
     }
