@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Telegram;
 
-use App\Exceptions\TelegramBotException;
-use Exception;
-use Illuminate\Support\Facades\Http;
+use App\Jobs\TelegramLoggerJob;
 
 final class TelegramBot
 {
@@ -16,7 +14,7 @@ final class TelegramBot
 
     private const SEND_MESSAGE_METHOD = '/sendMessage';
 
-    public static function sendMessage(string $token, int $channel, string $message): bool
+    public static function sendMessage(string $token, int $channel, string $message): void
     {
         $options = [
             'chat_id' => $channel,
@@ -25,17 +23,6 @@ final class TelegramBot
         ];
         $url = self::TELEGRAM_API . $token . self::SEND_MESSAGE_METHOD;
 
-        try {
-            //TODO: Make job for this request
-            $response = Http::post($url, $options)->json();
-        } catch (Exception) {
-            return false;
-        }
-
-        if (isset($response['error_code'])) {
-            throw new TelegramBotException($response['description']);
-        }
-
-        return true;
+        dispatch(new TelegramLoggerJob($url, $options));
     }
 }

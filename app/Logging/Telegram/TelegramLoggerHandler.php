@@ -27,16 +27,10 @@ final class TelegramLoggerHandler extends AbstractProcessingHandler
 
     protected function write(array $record): void
     {
-        try {
-            TelegramBot::sendMessage(
-                $this->token,
-                $this->channel,
-                $record['formatted']
-            );
-        } catch (TelegramBotException $exception) {
-            logger()
-                ->channel('stack')
-                ->debug('TelegramLogger ' . $exception->getMessage());
-        }
+        TelegramBot::sendMessage(
+            $this->token,
+            $this->channel,
+            $record['formatted']
+        );
     }
 }
