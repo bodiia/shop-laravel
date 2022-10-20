@@ -26,6 +26,7 @@ final class TelegramBot
         $url = self::TELEGRAM_API . $token . self::SEND_MESSAGE_METHOD;
 
         try {
+            //TODO: Make job for this request
             $response = Http::post($url, $options)->json();
         } catch (Exception) {
             return false;

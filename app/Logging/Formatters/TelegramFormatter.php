@@ -13,8 +13,8 @@ final class TelegramFormatter
     {
         foreach ($logger->getHandlers() as $handler) {
             $handler->setFormatter(new LineFormatter(
-                format: '`[%datetime%] %channel%.%level_name%: %message%`',
-                dateFormat: 'Y-m-d - H:i:s',
+                '`[%datetime%] %channel%.%level_name%: %message%, %context%`',
+                'Y-m-d - H:i:s',
             ));
         }
     }
