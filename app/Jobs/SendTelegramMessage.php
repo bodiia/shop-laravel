@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 
-class TelegramLoggerJob implements ShouldQueue
+class SendTelegramMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -27,5 +27,14 @@ class TelegramLoggerJob implements ShouldQueue
         if (isset($response['error_code'])) {
             $this->fail(new TelegramBotException($response['description']));
         }
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        logger()
+            ->channel('single')
+            ->warning('Error when sending a message to Telegram.', [
+                'error_message' => $exception->getMessage(),
+            ]);
     }
 }

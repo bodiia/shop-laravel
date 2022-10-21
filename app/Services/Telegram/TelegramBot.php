@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Telegram;
 
-use App\Jobs\TelegramLoggerJob;
+use App\Jobs\SendTelegramMessage;
 
 final class TelegramBot
 {
@@ -23,6 +23,6 @@ final class TelegramBot
         ];
         $url = self::TELEGRAM_API . $token . self::SEND_MESSAGE_METHOD;
 
-        dispatch(new TelegramLoggerJob($url, $options));
+        dispatch(new SendTelegramMessage($url, $options));
     }
 }

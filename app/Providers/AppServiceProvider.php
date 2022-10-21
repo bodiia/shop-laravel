@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Http\Kernel;
-use Carbon\CarbonInterval;
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,23 +17,26 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Model::shouldBeStrict(! app()->isProduction());
+        Model::shouldBeStrict(! $this->app->isProduction());
 
-        if (! app()->isProduction()) {
+        if ($this->app->isProduction()) {
             DB::listen(static function ($query) {
-                if (! str($query->sql)->startsWith("insert into \"jobs\"") && $query->time > 1000) {
+                if (! str($query->sql)->startsWith('insert into "jobs"') && $query->time > 1000) {
                     logger()
                         ->channel('telegram')
-                        ->debug('Query execution so long: ' . $query->sql, $query->bindings);
+                        ->warning('An individual database query exceeded 1 second.', [
+                            'sql' => $query->sql,
+                            'bindings' => $query->bindings,
+                        ]);
                 }
             });
 
-            app(Kernel::class)->whenRequestLifecycleIsLongerThan(
-                CarbonInterval::milliseconds(120),
-                static function () {
+            $this->app[HttpKernel::class]->whenRequestLifecycleIsLongerThan(
+                5000,
+                static function ($startedAt, Request $request) {
                     logger()
                         ->channel('telegram')
-                        ->debug('whenRequestLifecycleIsLongerThan: ' . request()->url());
+                        ->warning('A request took longer than 5 seconds.', ['url' => $request->url()]);
                 }
             );
         }
