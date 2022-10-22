@@ -3,12 +3,14 @@
 namespace App\Jobs;
 
 use App\Exceptions\TelegramBotException;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class SendTelegramMessage implements ShouldQueue
 {
@@ -25,16 +27,12 @@ class SendTelegramMessage implements ShouldQueue
         $response = Http::post($this->url, $this->options)->json();
 
         if (isset($response['error_code'])) {
-            $this->fail(new TelegramBotException($response['description']));
+            throw new Exception($response['description']);
         }
     }
 
-    public function failed(\Throwable $exception): void
+    public function failed(Throwable $exception): void
     {
-        logger()
-            ->channel('single')
-            ->warning('Error when sending a message to Telegram.', [
-                'error_message' => $exception->getMessage(),
-            ]);
+        report(new TelegramBotException($exception->getMessage()));
     }
 }

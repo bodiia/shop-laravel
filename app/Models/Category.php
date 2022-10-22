@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
-use App\Traits\Slugable;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
-    use HasFactory, Slugable;
+    use HasFactory, HasSlug;
 
     protected $fillable = [
         'title',
         'slug',
     ];
 
-    protected function slugable(): string
+    public static function slug(): string
     {
         return 'title';
     }

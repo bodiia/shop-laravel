@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\Slugable;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
 {
-    use HasFactory, Slugable;
+    use HasFactory, HasSlug;
 
     protected $fillable = [
         'slug',
@@ -17,7 +17,7 @@ class Brand extends Model
         'thumbnail',
     ];
 
-    public function slugable(): string
+    public static function slug(): string
     {
         return 'title';
     }

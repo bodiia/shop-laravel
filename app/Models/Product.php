@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\Slugable;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
-    use HasFactory, Slugable;
+    use HasFactory, HasSlug;
 
     protected $fillable = [
         'title',
@@ -20,7 +20,7 @@ class Product extends Model
         'brand_id',
     ];
 
-    public function slugable(): string
+    public static function slug(): string
     {
         return 'title';
     }
