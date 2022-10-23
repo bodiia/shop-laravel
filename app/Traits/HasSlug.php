@@ -19,9 +19,9 @@ trait HasSlug
     {
         $slug = str($model->{ static::slug() })->slug() . ($matched > 0 ? "-$matched" : "");
 
-        $match = $model->query()->where('slug', $slug)->count();
+        $match = $model->query()->where('slug', $slug)->exists();
 
-        return $match > 0 ? self::generateUniqueSlug($model, $matched + 1) : $slug;
+        return $match ? self::generateUniqueSlug($model, $matched + 1) : $slug;
     }
 
     abstract public static function slug(): string;
