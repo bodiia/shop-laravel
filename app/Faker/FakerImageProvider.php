@@ -12,21 +12,22 @@ use SplFileInfo;
 
 final class FakerImageProvider extends Base
 {
-    public function imageCopy(string $imageDirectory, string $saveDirectory): string
+    public function imageCopy(string $from, string $to): string
     {
-        if (! Storage::exists($saveDirectory)) {
-            Storage::makeDirectory($saveDirectory);
+        if (! Storage::exists($to)) {
+            Storage::makeDirectory($to);
         }
 
         /** @var SplFileInfo $file */
-        $file = self::randomElement(File::files($imageDirectory));
-        $randFilename = Str::random() . '.' . $file->getExtension();
+        $file = self::randomElement(File::files($from));
+
+        $filename = Str::random() . '.' . $file->getExtension();
 
         File::copy(
             $file->getPathname(),
-            Storage::path($saveDirectory . '/' . $randFilename),
+            Storage::path($to . '/' . $filename),
         );
 
-        return 'storage/' . $saveDirectory . '/' . $randFilename;
+        return 'storage/' . $to . '/' . $filename;
     }
 }
