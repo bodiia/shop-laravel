@@ -1,5 +1,5 @@
 {
-    "preset": "laravel",
+    "preset": "psr12",
     "rules": {
         "concat_space": false
     }
