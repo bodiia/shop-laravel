@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
                 if (! str($query->sql)->startsWith('insert into "jobs"') && $query->time > 1000) {
                     logger()
                         ->channel('telegram')
-                        ->warning('An individual database query exceeded 1 second.', [
+                        ->warning(__('logging.db.query.longer'), [
                             'sql' => $query->sql,
                             'bindings' => $query->bindings,
                         ]);
@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
                 static function ($startedAt, Request $request) {
                     logger()
                         ->channel('telegram')
-                        ->warning('A request took longer than 5 seconds.', ['url' => $request->url()]);
+                        ->warning(__('logging.request.longer'), ['url' => $request->url()]);
                 }
             );
         }
