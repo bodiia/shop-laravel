@@ -21,7 +21,7 @@ class Product extends Model
         'brand_id',
     ];
 
-    public static function slug(): string
+    protected function slug(): string
     {
         return 'title';
     }

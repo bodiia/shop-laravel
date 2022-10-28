@@ -11,18 +11,23 @@ trait HasSlug
     protected static function bootHasSlug(): void
     {
         static::creating(static function (Model $model) {
-            $model->slug = self::generateUniqueSlug($model);
+            $model->slug = $model->generateUniqueSlug(
+                $model,
+                str($model->{ $model->slug() })->slug()->value()
+            );
         });
     }
 
-    protected static function generateUniqueSlug(Model $model, int $matched = 0): string
+    protected function generateUniqueSlug(Model $model, string $slug, int $matched = 0): string
     {
-        $slug = str($model->{ static::slug() })->slug() . ($matched > 0 ? "-$matched" : "");
+        $uniqueSlugCandidate = $slug . ($matched > 0 ? "-$matched" : "");
 
-        $match = $model->query()->where('slug', $slug)->exists();
+        $match = $model->query()->withoutGlobalScopes()
+            ->where('slug', $uniqueSlugCandidate)
+            ->exists();
 
-        return $match ? self::generateUniqueSlug($model, $matched + 1) : $slug;
+        return $match ? self::generateUniqueSlug($model, $slug, $matched + 1) : $uniqueSlugCandidate;
     }
 
-    abstract public static function slug(): string;
+    abstract protected function slug(): string;
 }

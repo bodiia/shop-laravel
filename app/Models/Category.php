@@ -17,7 +17,7 @@ class Category extends Model
         'slug',
     ];
 
-    public static function slug(): string
+    protected function slug(): string
     {
         return 'title';
     }

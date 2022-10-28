@@ -115,10 +115,16 @@ class AuthController extends Controller
     {
         $githubUser = Socialite::driver('github')->user();
 
+        if (User::query()->where('email', $githubUser->getEmail())->exists()) {
+            return to_route('login.form')->withErrors([
+                'email' => __('validation.unique', ['attribute' =>'email'])
+            ]);
+        }
+
         $attributes = [
-            'name' => $githubUser->getName(),
+            'name' => $githubUser->getName() ?? $githubUser->getNickname(),
             'email' => $githubUser->getEmail(),
-            'password' => Hash::make($githubUser->getName()),
+            'password' => Hash::make($githubUser->getEmail()),
         ];
 
         /** @var User&Authenticatable $user */

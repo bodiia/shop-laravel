@@ -18,7 +18,7 @@ class Brand extends Model
         'thumbnail',
     ];
 
-    public static function slug(): string
+    protected function slug(): string
     {
         return 'title';
     }

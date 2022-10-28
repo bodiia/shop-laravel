@@ -20,14 +20,13 @@ final class FakerImageProvider extends Base
 
         /** @var SplFileInfo $file */
         $file = self::randomElement(File::files($from));
-
         $filename = Str::random() . '.' . $file->getExtension();
 
         File::copy(
             $file->getPathname(),
-            Storage::path($to . '/' . $filename),
+            Storage::path($to . DIRECTORY_SEPARATOR . $filename),
         );
 
-        return 'storage/' . $to . '/' . $filename;
+        return implode(DIRECTORY_SEPARATOR, ['storage', $to, $filename]);
     }
 }

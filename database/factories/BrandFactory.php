@@ -14,7 +14,10 @@ class BrandFactory extends Factory
     {
         return [
             'title' => $this->faker->company(),
-            'thumbnail' => '',
+            'thumbnail' => $this->faker->imageCopy(
+                base_path('tests/Fixture/images/brands'),
+                'images/brands'
+            ),
         ];
     }
 }
