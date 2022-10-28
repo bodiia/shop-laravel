@@ -10,26 +10,17 @@ use Monolog\Logger;
 
 final class TelegramLoggerHandler extends AbstractProcessingHandler
 {
-    protected string $token;
+    private TelegramBot $telegramBot;
 
-    protected int $channel;
-
-    public function __construct(array $config)
+    public function __construct(string $level, TelegramBot $telegramBot)
     {
-        $level = Logger::toMonologLevel($config['level']);
+        parent::__construct(Logger::toMonologLevel($level));
 
-        parent::__construct($level);
-
-        $this->token = $config['token'];
-        $this->channel = (int) $config['channel_id'];
+        $this->telegramBot = $telegramBot;
     }
 
     protected function write(array $record): void
     {
-        TelegramBot::sendMessage(
-            $this->token,
-            $this->channel,
-            $record['formatted']
-        );
+        $this->telegramBot->sendMessage($record['formatted']);
     }
 }
