@@ -43,7 +43,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('home'));
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     public function signup(SignUpRequest $request): RedirectResponse
@@ -79,9 +79,13 @@ class AuthController extends Controller
     {
         $status = Password::sendResetLink($request->validated());
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['message' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+        if ($status !== Password::RESET_LINK_SENT) {
+            return back()->withErrors(['email' => __($status)]);
+        }
+
+        flash()->info(__($status));
+
+        return back();
     }
 
     public function reset(string $token): View
@@ -101,9 +105,13 @@ class AuthController extends Controller
             event(new PasswordReset($user));
         });
 
-        return $status === Password::PASSWORD_RESET
-            ? to_route('login.form')->with(['message' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+        if ($status !== Password::PASSWORD_RESET) {
+            return back()->withErrors(['email' => __($status)]);
+        }
+
+        flash()->info(__($status));
+
+        return to_route('login.form');
     }
 
     public function githubRedirect(): RedirectResponse
@@ -116,9 +124,10 @@ class AuthController extends Controller
         $githubUser = Socialite::driver('github')->user();
 
         if (User::query()->where('email', $githubUser->getEmail())->exists()) {
-            return to_route('login.form')->withErrors([
-                'email' => __('validation.unique', ['attribute' =>'email'])
-            ]);
+            return to_route('login.form')
+                ->withErrors([
+                    'email' => __('validation.unique', ['attribute' =>'email'])
+                ]);
         }
 
         $attributes = [

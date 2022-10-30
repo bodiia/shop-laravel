@@ -19,7 +19,7 @@ final class FakerImageProvider extends Base
         }
 
         /** @var SplFileInfo $file */
-        $file = self::randomElement(File::files($from));
+        $file = self::randomElement(File::files(base_path('tests/Fixture/images' . DIRECTORY_SEPARATOR . $from)));
         $filename = Str::random() . '.' . $file->getExtension();
 
         File::copy(

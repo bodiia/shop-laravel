@@ -15,10 +15,7 @@ class ProductFactory extends Factory
     {
         return [
             'title' => ucfirst($this->faker->words(2, true)),
-            'thumbnail' => $this->faker->imageCopy(
-                base_path('tests/Fixture/images/products'),
-                'images/products'
-            ),
+            'thumbnail' => $this->faker->imageCopy('products', 'images/products'),
             'price' => $this->faker->numberBetween(1000, 100000),
             'brand_id' => Brand::query()->inRandomOrder()->value('id'),
         ];
