@@ -12,7 +12,7 @@ Route::controller(AuthController::class)->group(function () {
         ->middleware('throttle:auth')
         ->name('login.signin');
 
-    Route::get('/signup', 'showRegisterForm')->name('register.form');
+    Route::get('/signup', 'showSignupForm')->name('signup.form');
     Route::post('/signup', 'signup')
         ->middleware('throttle:auth')
         ->name('register.signup');

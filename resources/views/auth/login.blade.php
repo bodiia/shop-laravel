@@ -47,7 +47,7 @@
                     <a href="{{ route('password.request') }}" class="text-white hover:text-white/70 font-bold">Забыли пароль?</a>
                 </div>
                 <div class="text-xxs md:text-xs">
-                    <a href="{{ route('register.form') }}" class="text-white hover:text-white/70 font-bold">Регистрация</a>
+                    <a href="{{ route('signup.form') }}" class="text-white hover:text-white/70 font-bold">Регистрация</a>
                 </div>
             </div>
         </x-slot:buttons>
