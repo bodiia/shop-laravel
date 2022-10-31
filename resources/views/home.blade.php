@@ -2,7 +2,7 @@
 
 @section('content')
     @auth
-        <form action="{{ route('logout') }}" method="POST">
+        <form action="{{ route('signin.logout') }}" method="POST">
             @csrf
             @method('DELETE')
             <button type="submit">Выйти</button>

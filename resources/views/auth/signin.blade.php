@@ -1,23 +1,10 @@
 @extends('layouts.auth')
 
-@section('title', 'Регистрация')
+@section('title', 'Вход в аккаунт')
 
 @section('content')
-    <x-forms.auth-forms title="Регистрация" action="{{ route('signup.handle') }}" method="POST">
+    <x-forms.auth-forms title="Вход в аккаунт" action="{{ route('signin.handle') }}" method="POST">
         @csrf
-
-        <x-forms.text-input
-            name="name"
-            type="text"
-            placeholder="Имя"
-            required="true"
-            value="{{ old('name') }}"
-            :invalid="$errors->has('name')"></x-forms.text-input>
-        @error('name')
-            <x-forms.error>
-                {{ $message }}
-            </x-forms.error>
-        @enderror
 
         <x-forms.text-input
             name="email"
@@ -38,25 +25,8 @@
             placeholder="Пароль"
             required="true"
             :invalid="$errors->has('password')"></x-forms.text-input>
-        @error('password')
-            <x-forms.error>
-                {{ $message }}
-            </x-forms.error>
-        @enderror
 
-        <x-forms.text-input
-            name="password_confirmation"
-            type="password"
-            placeholder="Подтверждение пароля"
-            required="true"
-            :invalid="$errors->has('password_confirmation')"></x-forms.text-input>
-        @error('email')
-            <x-forms.error>
-                {{ $message }}
-            </x-forms.error>
-        @enderror
-
-        <x-forms.primary-button type="submit">Зарегистрироваться</x-forms.primary-button>
+        <x-forms.primary-button type="submit">Войти</x-forms.primary-button>
 
         <x-slot:social>
             <ul class="space-y-3 my-2">
@@ -74,7 +44,10 @@
         <x-slot:buttons>
             <div class="space-y-3 mt-5">
                 <div class="text-xxs md:text-xs">
-                    <a href="{{ route('signin.index') }}" class="text-white hover:text-white/70 font-bold">Войти в аккаунт</a>
+                    <a href="{{ route('forgot.index') }}" class="text-white hover:text-white/70 font-bold">Забыли пароль?</a>
+                </div>
+                <div class="text-xxs md:text-xs">
+                    <a href="{{ route('signup.index') }}" class="text-white hover:text-white/70 font-bold">Регистрация</a>
                 </div>
             </div>
         </x-slot:buttons>

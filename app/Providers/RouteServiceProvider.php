@@ -2,29 +2,31 @@
 
 namespace App\Providers;
 
+use App\Routing\AppRegistrar;
+use Domain\Auth\Routing\AuthRegistrar;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 class RouteServiceProvider extends ServiceProvider
 {
     public const HOME = '/';
 
+    protected array $registrars = [
+        AppRegistrar::class,
+        AuthRegistrar::class,
+    ];
+
     public function boot(): void
     {
         $this->configureRateLimiting();
+    }
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
-
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
+    public function map(): void
+    {
+        $this->mapRoutes($this->registrars);
     }
 
     protected function configureRateLimiting(): void
@@ -44,5 +46,12 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+    }
+
+    protected function mapRoutes(array $registrars): void
+    {
+        foreach ($registrars as $registrar) {
+            (new $registrar())->map();
+        }
     }
 }
