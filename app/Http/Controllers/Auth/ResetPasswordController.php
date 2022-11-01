@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResetPasswordRequest;
-use Domain\Auth\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
+use Domain\Auth\Actions\ResetPasswordAction;
+use Domain\Auth\DTO\ResetPasswordDto;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ResetPasswordController extends Controller
@@ -19,20 +17,14 @@ class ResetPasswordController extends Controller
         return view('auth.reset-password', ['token' => $token]);
     }
 
-    public function handle(ResetPasswordRequest $request): RedirectResponse
+    public function handle(ResetPasswordRequest $request, ResetPasswordAction $action): RedirectResponse
     {
-        $status = Password::reset($request->validated(), function (User $user, string $password) {
-            $user
-                ->forceFill(['password' => Hash::make($password)])
-                ->setRememberToken(Str::random(60));
-
-            $user->save();
-
-            event(new PasswordReset($user));
-        });
+        $status = $action->handle(ResetPasswordDto::fromRequest($request));
 
         if ($status !== Password::PASSWORD_RESET) {
-            return back()->withErrors(['email' => __($status)]);
+            $errors = ['email' => __($status)];
+
+            return back()->withErrors($errors);
         }
 
         flash()->info(__($status));

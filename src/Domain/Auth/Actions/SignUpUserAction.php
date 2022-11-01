@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Domain\Auth\Actions;
 
-use Domain\Auth\Contracts\RegisterUserContract;
-use Domain\Auth\DTO\RegisterUserDto;
+use Domain\Auth\DTO\SignUpUserDto;
 use Domain\Auth\Models\User;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 
-final class RegisterUserAction implements RegisterUserContract
+final class SignUpUserAction
 {
-    public function handle(RegisterUserDto $registerUserDto): void
+    public function handle(SignUpUserDto $signupUserDto): void
     {
         $attributes = [
-            'name' => $registerUserDto->name,
-            'email' => $registerUserDto->email,
-            'password' => Hash::make($registerUserDto->password),
+            'name' => $signupUserDto->name,
+            'email' => $signupUserDto->email,
+            'password' => Hash::make($signupUserDto->password),
         ];
 
         /** @var User&Authenticatable $user */

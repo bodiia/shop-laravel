@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ForgotPasswordRequest;
+use Domain\Auth\Actions\ForgotPasswordAction;
+use Domain\Auth\DTO\ForgotPasswordDto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
@@ -15,12 +17,14 @@ class ForgotPasswordController extends Controller
         return view('auth.forgot-password');
     }
 
-    public function handle(ForgotPasswordRequest $request): RedirectResponse
+    public function handle(ForgotPasswordRequest $request, ForgotPasswordAction $action): RedirectResponse
     {
-        $status = Password::sendResetLink($request->validated());
+        $status = $action->handle(ForgotPasswordDto::fromRequest($request));
 
         if ($status !== Password::RESET_LINK_SENT) {
-            return back()->withErrors(['email' => __($status)]);
+            $errors = ['email' => __($status)];
+
+            return back()->withErrors($errors);
         }
 
         flash()->info(__($status));

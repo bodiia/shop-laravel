@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInRequest;
 use App\Providers\RouteServiceProvider;
+use Domain\Auth\Actions\LogoutUserAction;
+use Domain\Auth\Actions\SignInUserAction;
+use Domain\Auth\DTO\SignInUserDto;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SignInController extends Controller
@@ -16,27 +18,22 @@ class SignInController extends Controller
         return view('auth.signin');
     }
 
-    public function handle(SignInRequest $request): RedirectResponse
+    public function handle(SignInRequest $request, SignInUserAction $action): RedirectResponse
     {
-        if (! auth()->attempt($request->validated())) {
-            return back()
-                ->withErrors([
-                    'email' => 'The provided credentials do not match our records.',
-                ])
-                ->onlyInput('email');
-        }
+        if (! $action->handle(SignInUserDto::fromRequest($request))) {
+            $errors = [
+                'email' => 'The provided credentials do not match our records.',
+            ];
 
-        $request->session()->regenerate();
+            return back()->withErrors($errors)->onlyInput('email');
+        }
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
-    public function logout(Request $request): RedirectResponse
+    public function logout(LogoutUserAction $action): RedirectResponse
     {
-        auth()->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $action->handle();
 
         return redirect(RouteServiceProvider::HOME);
     }

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignUpRequest;
 use App\Providers\RouteServiceProvider;
-use Domain\Auth\Contracts\RegisterUserContract;
-use Domain\Auth\DTO\RegisterUserDto;
+use Domain\Auth\Actions\SignUpUserAction;
+use Domain\Auth\DTO\SignUpUserDto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -17,9 +17,9 @@ class SignUpController extends Controller
         return view('auth.signup');
     }
 
-    public function handle(SignUpRequest $request, RegisterUserContract $action): RedirectResponse
+    public function handle(SignUpRequest $request, SignUpUserAction $action): RedirectResponse
     {
-        $action->handle(RegisterUserDto::fromRequest($request));
+        $action->handle(SignUpUserDto::fromRequest($request));
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

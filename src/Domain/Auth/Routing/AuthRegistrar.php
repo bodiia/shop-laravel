@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SignInController;
 use App\Http\Controllers\Auth\SignUpController;
-use App\Http\Controllers\Auth\SocialAuthController;
+use App\Http\Controllers\Auth\SocialAuthenticationController;
 use Illuminate\Support\Facades\Route;
 
 final class AuthRegistrar implements RouteRegistrar
@@ -58,7 +58,7 @@ final class AuthRegistrar implements RouteRegistrar
                     ->name('password.reset.handle');
             });
 
-            Route::controller(SocialAuthController::class)->group(function () {
+            Route::controller(SocialAuthenticationController::class)->group(function () {
                 Route::get('/socialite/{driver}/redirect', 'redirect')
                     ->name('socialite.redirect');
 
