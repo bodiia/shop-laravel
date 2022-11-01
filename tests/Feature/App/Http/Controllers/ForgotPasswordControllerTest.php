@@ -6,7 +6,6 @@ use Database\Factories\UserFactory;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Tests\RequestFactories\ForgotPasswordRequestFactory;
 use Tests\TestCase;
 
 class ForgotPasswordControllerTest extends TestCase
@@ -29,10 +28,8 @@ class ForgotPasswordControllerTest extends TestCase
 
         $user = UserFactory::new()->create($attributes);
 
-        $request = ForgotPasswordRequestFactory::new()->create($attributes);
-
         $this
-            ->post(route('forgot.handle'), $request)
+            ->post(route('forgot.handle'), $attributes)
             ->assertValid()
             ->assertRedirect();
 

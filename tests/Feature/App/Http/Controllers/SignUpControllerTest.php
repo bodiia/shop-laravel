@@ -7,13 +7,14 @@ use App\Providers\RouteServiceProvider;
 use Domain\Auth\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
-use Tests\RequestFactories\SignUpRequestFactory;
 use Tests\TestCase;
 
 class SignUpControllerTest extends TestCase
 {
+    use WithFaker;
     use RefreshDatabase;
 
     public function test_a_guest_can_view_signup_page()
@@ -29,7 +30,12 @@ class SignUpControllerTest extends TestCase
         Event::fake();
         Notification::fake();
 
-        $request = SignUpRequestFactory::new()->create();
+        $request = [
+            'name' => $this->faker->firstName(),
+            'email' => 'test@gmail.com',
+            'password' => '123456789',
+            'password_confirmation' => '123456789',
+        ];
 
         $response = $this->post(route('signup.handle'), $request);
 

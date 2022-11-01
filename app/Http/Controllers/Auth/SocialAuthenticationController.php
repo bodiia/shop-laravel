@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Domain\Auth\Actions\SocialAuthenticationAction;
 use Domain\Auth\DTO\SocialAuthenticationDto;
-use Domain\Auth\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthenticationController extends Controller

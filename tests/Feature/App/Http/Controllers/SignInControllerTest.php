@@ -6,7 +6,6 @@ use App\Providers\RouteServiceProvider;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-use Tests\RequestFactories\SignInRequestFactory;
 use Tests\TestCase;
 
 class SignInControllerTest extends TestCase
@@ -33,10 +32,8 @@ class SignInControllerTest extends TestCase
             'password' => Hash::make($attributes['password'])
         ]);
 
-        $request = SignInRequestFactory::new()->create($attributes);
-
         $this
-            ->post(route('signin.handle'), $request)
+            ->post(route('signin.handle'), $attributes)
             ->assertValid()
             ->assertRedirect(RouteServiceProvider::HOME);
 

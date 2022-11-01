@@ -4,13 +4,14 @@ namespace Tests\Feature\App\Http\Controllers;
 
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Password;
-use Tests\RequestFactories\ResetPasswordRequestFactory;
 use Tests\TestCase;
 
 class ResetPasswordControllerTest extends TestCase
 {
+    use WithFaker;
     use RefreshDatabase;
 
     public function test_a_user_can_view_reset_password_page()
@@ -37,8 +38,12 @@ class ResetPasswordControllerTest extends TestCase
 
         $token = Password::createToken($user);
 
-        $request = ResetPasswordRequestFactory::new()
-            ->create([...$attributes, 'token' => $token]);
+        $request = [
+            ...$attributes,
+            'password' => '123456789',
+            'password_confirmation' => '123456789',
+            'token' => $token,
+        ];
 
         $this
             ->post(route('password.reset.handle'), $request)

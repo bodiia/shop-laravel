@@ -18,8 +18,10 @@ final class SocialAuthenticationAction
             'password' => Hash::make($authenticationDto->user->getEmail()),
         ];
 
-        $user = User::query()
-            ->updateOrCreate([$authenticationDto->socialType . '_id' => $authenticationDto->user->getId()], $attributes);
+        $user = User::query()->updateOrCreate(
+            [$authenticationDto->socialType . '_id' => $authenticationDto->user->getId()],
+            $attributes
+        );
 
         auth()->login($user);
     }
