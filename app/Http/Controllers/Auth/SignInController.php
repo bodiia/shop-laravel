@@ -20,7 +20,7 @@ class SignInController extends Controller
 
     public function handle(SignInRequest $request, SignInUserAction $action): RedirectResponse
     {
-        if (! $action->handle(SignInUserDto::fromRequest($request))) {
+        if (! $action->handle(SignInUserDto::fromArray($request->validated()))) {
             $errors = [
                 'email' => 'The provided credentials do not match our records.',
             ];

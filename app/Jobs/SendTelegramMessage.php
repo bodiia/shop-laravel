@@ -14,7 +14,6 @@ use Throwable;
 
 class SendTelegramMessage implements ShouldQueue
 {
-    use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;

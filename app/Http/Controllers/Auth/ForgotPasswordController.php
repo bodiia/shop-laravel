@@ -19,7 +19,7 @@ class ForgotPasswordController extends Controller
 
     public function handle(ForgotPasswordRequest $request, ForgotPasswordAction $action): RedirectResponse
     {
-        $status = $action->handle(ForgotPasswordDto::fromRequest($request));
+        $status = $action->handle(ForgotPasswordDto::fromArray($request->validated()));
 
         if ($status !== Password::RESET_LINK_SENT) {
             $errors = ['email' => __($status)];

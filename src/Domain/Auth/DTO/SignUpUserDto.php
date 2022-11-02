@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Auth\DTO;
 
-use Illuminate\Http\Request;
-
 final class SignUpUserDto
 {
     private function __construct(
@@ -15,12 +13,12 @@ final class SignUpUserDto
     ) {
     }
 
-    public static function fromRequest(Request $request): self
+    public static function fromArray(array $data): self
     {
         return new self(
-            $request->name,
-            $request->email,
-            $request->password,
+            $data['name'],
+            $data['email'],
+            $data['password'],
         );
     }
 }

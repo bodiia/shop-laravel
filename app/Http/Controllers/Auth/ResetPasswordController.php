@@ -19,7 +19,7 @@ class ResetPasswordController extends Controller
 
     public function handle(ResetPasswordRequest $request, ResetPasswordAction $action): RedirectResponse
     {
-        $status = $action->handle(ResetPasswordDto::fromRequest($request));
+        $status = $action->handle(ResetPasswordDto::fromArray($request->validated()));
 
         if ($status !== Password::PASSWORD_RESET) {
             $errors = ['email' => __($status)];
