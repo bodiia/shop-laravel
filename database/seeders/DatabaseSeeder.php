@@ -11,10 +11,10 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Brand::factory(5)->create();
+        Brand::factory(10)->create();
 
-        Category::factory(2)
-            ->has(Product::factory(rand(1, 3)))
+        Category::factory(10)
+            ->has(Product::factory(rand(2, 6)))
             ->create();
     }
 }

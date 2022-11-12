@@ -15,8 +15,8 @@ final class TelegramBot
     private const SEND_MESSAGE_METHOD = '/sendMessage';
 
     public function __construct(
-        private string $token,
-        private int $channel
+        private readonly string $token,
+        private readonly int $channel
     ) {
     }
 

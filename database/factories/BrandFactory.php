@@ -15,6 +15,8 @@ class BrandFactory extends Factory
         return [
             'title' => $this->faker->company(),
             'thumbnail' => $this->faker->imageCopy('brands', 'images/brands'),
+            'on_homepage' => $this->faker->boolean(),
+            'sorting' => $this->faker->numberBetween(1, 999),
         ];
     }
 }

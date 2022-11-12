@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasSlug;
+use App\Traits\HasThumbnail;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +14,7 @@ class Product extends Model
 {
     use HasFactory;
     use HasSlug;
+    use HasThumbnail;
 
     protected $fillable = [
         'title',
@@ -19,7 +22,16 @@ class Product extends Model
         'thumbnail',
         'price',
         'brand_id',
+        'on_homepage',
+        'sorting',
     ];
+
+    public function scopeHomepage(Builder $query): void
+    {
+        $query->where('on_homepage', true)
+            ->orderBy('sorting')
+            ->limit(6);
+    }
 
     protected function slug(): string
     {

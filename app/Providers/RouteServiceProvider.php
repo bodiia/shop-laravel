@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\RouteRegistrar;
 use App\Routing\AppRegistrar;
 use Domain\Auth\Routing\AuthRegistrar;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -26,7 +27,9 @@ class RouteServiceProvider extends ServiceProvider
 
     public function map(): void
     {
-        $this->mapRoutes($this->registrars);
+        collect($this->registrars)
+            ->map(fn (string $routeClass) => new $routeClass())
+            ->each(fn (RouteRegistrar $route) => $route->map());
     }
 
     protected function configureRateLimiting(): void
@@ -46,12 +49,5 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
-    }
-
-    protected function mapRoutes(array $registrars): void
-    {
-        foreach ($registrars as $registrar) {
-            (new $registrar())->map();
-        }
     }
 }
