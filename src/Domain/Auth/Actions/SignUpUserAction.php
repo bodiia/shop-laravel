@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 final class SignUpUserAction
 {
-    public function handle(SignUpUserDto $signupUserDto): void
+    public function handle(SignUpUserDto $signupUserDto): User
     {
         $attributes = [
             'name' => $signupUserDto->name,
@@ -23,6 +23,6 @@ final class SignUpUserAction
 
         event(new Registered($user));
 
-        auth()->login($user);
+        return $user;
     }
 }

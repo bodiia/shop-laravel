@@ -9,12 +9,9 @@ use Services\Telegram\TelegramBot;
 
 final class TelegramLoggerFactory
 {
-    public function __invoke(array $config): Logger
+    public function __invoke(): Logger
     {
-        $handler = new TelegramLoggerHandler(
-            $config['level'],
-            new TelegramBot($config['token'], (int) $config['channel_id'])
-        );
+        $handler = new TelegramLoggerHandler(app(TelegramBot::class));
 
         return (new Logger('telegram'))->pushHandler($handler);
     }

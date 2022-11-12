@@ -12,7 +12,7 @@ final class TelegramLoggerHandler extends AbstractProcessingHandler
 {
     private TelegramBot $telegramBot;
 
-    public function __construct(string $level, TelegramBot $telegramBot)
+    public function __construct(TelegramBot $telegramBot, string $level = 'debug')
     {
         parent::__construct(Logger::toMonologLevel($level));
 

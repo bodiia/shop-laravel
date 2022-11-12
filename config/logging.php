@@ -122,9 +122,6 @@ return [
             'driver' => 'custom',
             'via' => \Support\Logging\Telegram\TelegramLoggerFactory::class,
             'tap' => [\Support\Logging\Formatters\TelegramFormatter::class],
-            'level' => env('LOG_LEVEL', 'debug'),
-            'channel_id' => env('TELEGRAM_CHANNEL_ID'),
-            'token' => env('TELEGRAM_API_KEY'),
         ],
     ],
 
