@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Services\Telegram;
 
-use App\Jobs\SendTelegramMessage;
+use Services\Telegram\Jobs\SendTelegramMessage;
 
 final class TelegramBot
 {

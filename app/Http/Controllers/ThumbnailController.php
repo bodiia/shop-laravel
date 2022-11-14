@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+// TODO: write tests
 class ThumbnailController extends Controller
 {
     public function __invoke(string $dirname, string $method, string $size, string $filename): BinaryFileResponse

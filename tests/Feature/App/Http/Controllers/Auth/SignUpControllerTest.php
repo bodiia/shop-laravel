@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Listeners\SendGreetingEmailToUser;
 use App\Providers\RouteServiceProvider;

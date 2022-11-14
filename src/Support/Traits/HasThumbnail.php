@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace Support\Traits;
 
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
@@ -33,6 +33,6 @@ trait HasThumbnail
         return str($reflection->getShortName())
             ->lower()
             ->plural()
-            ->toString();
+            ->value();
     }
 }

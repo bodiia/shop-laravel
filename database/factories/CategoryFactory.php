@@ -2,7 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
+use Database\Factories\Traits\HasHomepageStates;
+use Domain\Catalog\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +11,10 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CategoryFactory extends Factory
 {
+    use HasHomepageStates;
+
+    protected $model = Category::class;
+
     public function definition(): array
     {
         return [

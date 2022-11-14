@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Brand;
 use App\Models\Product;
+use Database\Factories\Traits\HasHomepageStates;
+use Domain\Catalog\Models\Brand;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProductFactory extends Factory
 {
+    use HasHomepageStates;
+
     public function definition(): array
     {
         return [

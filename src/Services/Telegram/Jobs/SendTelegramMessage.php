@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace Services\Telegram\Jobs;
 
 use Exception;
 use Illuminate\Bus\Queueable;

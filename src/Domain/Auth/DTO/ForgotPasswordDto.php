@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Auth\DTO;
 
+use Illuminate\Http\Request;
+
 final class ForgotPasswordDto
 {
     private function __construct(
@@ -11,10 +13,10 @@ final class ForgotPasswordDto
     ) {
     }
 
-    public static function fromArray(array $data): self
+    public static function fromRequest(Request $request): self
     {
         return new self(
-            $data['email']
+            $request->email
         );
     }
 }
