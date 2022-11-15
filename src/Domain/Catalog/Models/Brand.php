@@ -28,6 +28,14 @@ class Brand extends Model
         'sorting',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        collect(['saved', 'deleted'])
+            ->each(fn ($event) => static::$event(fn () => cache()->delete('brand_homepage')));
+    }
+
     public function newCollection(array $models = []): BrandCollection
     {
         return new BrandCollection($models);

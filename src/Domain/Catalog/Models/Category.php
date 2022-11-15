@@ -25,6 +25,14 @@ class Category extends Model
         'sorting',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        collect(['saved', 'deleted'])
+            ->each(fn ($event) => static::$event(fn () => cache()->delete('category_homepage')));
+    }
+
     public function newCollection(array $models = []): CategoryCollection
     {
         return new CategoryCollection($models);
