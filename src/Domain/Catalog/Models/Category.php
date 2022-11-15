@@ -30,7 +30,8 @@ class Category extends Model
         parent::boot();
 
         collect(['saved', 'deleted'])
-            ->each(fn ($event) => static::$event(fn () => cache()->delete('category_homepage')));
+            ->each(static fn ($event) =>
+                static::$event(static fn () => cache()->delete('category_homepage')));
     }
 
     public function newCollection(array $models = []): CategoryCollection

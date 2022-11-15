@@ -21,7 +21,7 @@ final class ResetPasswordAction
             'token' => $resetPasswordDto->token,
         ];
 
-        return Password::reset($credentials, function (User $user, string $password) {
+        return Password::reset($credentials, static function (User $user, string $password) {
             $user
                 ->forceFill(['password' => Hash::make($password)])
                 ->setRememberToken(Str::random(60));
