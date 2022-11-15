@@ -3,13 +3,17 @@
 namespace Domain\Catalog\Models;
 
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Builder;
+use Domain\Catalog\Builders\BrandBuilder;
+use Domain\Catalog\Collections\BrandCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Support\Traits\HasSlug;
-use Support\Traits\HasThumbnail;
+use Support\Traits\Models\HasSlug;
+use Support\Traits\Models\HasThumbnail;
 
+/**
+ * @method static Brand|BrandBuilder query()
+ */
 class Brand extends Model
 {
     use HasFactory;
@@ -24,11 +28,14 @@ class Brand extends Model
         'sorting',
     ];
 
-    public function scopeHomepage(Builder $query): void
+    public function newCollection(array $models = []): BrandCollection
     {
-        $query->where('on_homepage', true)
-            ->orderBy('sorting')
-            ->limit(6);
+        return new BrandCollection($models);
+    }
+
+    public function newEloquentBuilder($query): BrandBuilder
+    {
+        return new BrandBuilder($query);
     }
 
     protected function slug(): string

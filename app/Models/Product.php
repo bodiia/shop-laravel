@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Support\Traits\HasSlug;
-use Support\Traits\HasThumbnail;
+use Support\Casts\PriceCast;
+use Support\Traits\Models\HasSlug;
+use Support\Traits\Models\HasThumbnail;
 
 class Product extends Model
 {
@@ -26,6 +27,10 @@ class Product extends Model
         'brand_id',
         'on_homepage',
         'sorting',
+    ];
+
+    protected $casts = [
+        'price' => PriceCast::class,
     ];
 
     public function scopeHomepage(Builder $query): void

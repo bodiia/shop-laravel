@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Support\Traits;
+namespace Support\Traits\Models;
 
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
