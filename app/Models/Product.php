@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Support\Casts\PriceCast;
+use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
 use Support\Traits\Models\HasThumbnail;
 
@@ -18,6 +19,7 @@ class Product extends Model
     use HasFactory;
     use HasSlug;
     use HasThumbnail;
+    use Cacheable;
 
     protected $fillable = [
         'title',
@@ -40,11 +42,6 @@ class Product extends Model
             ->limit(6);
     }
 
-    protected function slug(): string
-    {
-        return 'title';
-    }
-
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
@@ -53,5 +50,15 @@ class Product extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    protected static function cacheKeys(): array
+    {
+        return ['product_homepage'];
+    }
+
+    protected function slug(): string
+    {
+        return 'title';
     }
 }

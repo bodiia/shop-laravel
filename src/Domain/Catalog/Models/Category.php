@@ -8,6 +8,7 @@ use Domain\Catalog\Collections\CategoryCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
 
 /**
@@ -17,6 +18,7 @@ class Category extends Model
 {
     use HasFactory;
     use HasSlug;
+    use Cacheable;
 
     protected $fillable = [
         'title',
@@ -24,15 +26,6 @@ class Category extends Model
         'on_homepage',
         'sorting',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        collect(['saved', 'deleted'])
-            ->each(static fn ($event) =>
-                static::$event(static fn () => cache()->delete('category_homepage')));
-    }
 
     public function newCollection(array $models = []): CategoryCollection
     {
@@ -44,13 +37,18 @@ class Category extends Model
         return new CategoryBuilder($query);
     }
 
-    protected function slug(): string
-    {
-        return 'title';
-    }
-
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class);
+    }
+
+    protected static function cacheKeys(): array
+    {
+        return ['category_homepage'];
+    }
+
+    protected function slug(): string
+    {
+        return 'title';
     }
 }
