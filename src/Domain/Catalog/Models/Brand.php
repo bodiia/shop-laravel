@@ -45,12 +45,14 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 
-    protected static function cacheKeys(): array
+    protected static function cache(): array
     {
-        return ['brand_homepage'];
+        return [
+            'brand_homepage',
+        ];
     }
 
-    protected function slug(): string
+    protected static function slugableField(): string
     {
         return 'title';
     }

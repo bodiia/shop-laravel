@@ -10,9 +10,6 @@ final class CategoryBuilder extends Builder
 {
     public function homepage(): self
     {
-        return $this->select(['id', 'title', 'slug'])
-            ->where('on_homepage', true)
-            ->orderBy('sorting')
-            ->limit(6);
+        return $this->where('on_homepage', true)->orderBy('sorting')->limit(6);
     }
 }

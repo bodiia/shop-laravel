@@ -21,7 +21,7 @@ final class HomepageViewModel extends ViewModel
     public function products(): Collection
     {
         return cache()->rememberForever('product_homepage', function () {
-            return Product::query()->homepage()->get();
+            return Product::query()->with('brand')->homepage()->get();
         });
     }
 

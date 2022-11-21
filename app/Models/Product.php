@@ -26,6 +26,7 @@ class Product extends Model
         'slug',
         'thumbnail',
         'price',
+        'text',
         'brand_id',
         'on_homepage',
         'sorting',
@@ -37,9 +38,32 @@ class Product extends Model
 
     public function scopeHomepage(Builder $query): void
     {
-        $query->where('on_homepage', true)
-            ->orderBy('sorting')
-            ->limit(6);
+        $query->where('on_homepage', true)->orderBy('sorting')->limit(6);
+    }
+
+    public function scopeFiltered(Builder $query): void
+    {
+        $query->when(request('filters.brands'), function (Builder $q) {
+            $q->whereIn('brand_id', request('filters.brands'));
+        })->when(request('filters.price'), function (Builder $q) {
+            $q->whereBetween('price', [
+                request('filters.price.from', 0) * 100,
+                request('filters.price.to', 100000) * 100,
+            ]);
+        });
+    }
+
+    public function scopeSorted(Builder $query): void
+    {
+        $query->when(request('sort'), function (Builder $q) {
+            $column = str(request('sort'));
+
+            if ($column->contains(['price', 'title'])) {
+                $direction = $column->contains('-') ? 'DESC' : 'ASC';
+
+                $q->orderBy((string) $column->remove('-'), $direction);
+            }
+        });
     }
 
     public function brand(): BelongsTo
@@ -52,12 +76,14 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    protected static function cacheKeys(): array
+    protected static function cache(): array
     {
-        return ['product_homepage'];
+        return [
+            'product_homepage',
+        ];
     }
 
-    protected function slug(): string
+    protected static function slugableField(): string
     {
         return 'title';
     }

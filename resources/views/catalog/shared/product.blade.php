@@ -5,6 +5,7 @@
     </a>
     <div class="grow flex flex-col py-8 px-6">
         <h3 class="text-sm lg:text-md font-black"><a href="#" class="inline-block text-white hover:text-pink">{{ $product->title }}</a></h3>
+        <span class="text-xs">{{ $product->brand->title }}</span>
         <div class="mt-auto pt-6">
             <div class="mb-3 text-sm font-semibold">{{ $product->price }}</div>
             <div class="flex flex-wrap items-center gap-4">

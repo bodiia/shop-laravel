@@ -42,12 +42,14 @@ class Category extends Model
         return $this->belongsToMany(Product::class);
     }
 
-    protected static function cacheKeys(): array
+    protected static function cache(): array
     {
-        return ['category_homepage'];
+        return [
+            'category_homepage',
+        ];
     }
 
-    protected function slug(): string
+    protected static function slugableField(): string
     {
         return 'title';
     }

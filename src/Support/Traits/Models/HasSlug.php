@@ -12,7 +12,7 @@ trait HasSlug
     {
         static::creating(static function (Model $model) {
             $model->slug = $model->generateUniqueSlug(
-                str($model->{ $model->slug() })->slug()->value()
+                str($model->{ static::slugableField() })->slug()->value()
             );
         });
     }
@@ -28,5 +28,5 @@ trait HasSlug
         return $match ? $this->generateUniqueSlug($slug, $matched + 1) : $uniqueSlugCandidate;
     }
 
-    abstract protected function slug(): string;
+    abstract protected static function slugableField(): string;
 }
