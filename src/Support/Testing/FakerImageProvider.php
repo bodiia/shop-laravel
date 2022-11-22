@@ -14,8 +14,10 @@ final class FakerImageProvider extends Base
 {
     public function imageCopy(string $from, string $to): string
     {
-        if (! Storage::exists($to)) {
-            Storage::makeDirectory($to);
+        $storage = Storage::disk('images');
+
+        if (! $storage->exists($to)) {
+            $storage->makeDirectory($to);
         }
 
         /** @var SplFileInfo $file */
@@ -24,7 +26,7 @@ final class FakerImageProvider extends Base
 
         File::copy(
             $file->getPathname(),
-            Storage::path($to . DIRECTORY_SEPARATOR . $filename),
+            $storage->path($to . DIRECTORY_SEPARATOR . $filename),
         );
 
         return implode(DIRECTORY_SEPARATOR, ['storage', $to, $filename]);

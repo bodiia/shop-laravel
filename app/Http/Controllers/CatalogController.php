@@ -12,8 +12,8 @@ class CatalogController extends Controller
 {
     public function __invoke(?Category $category): View
     {
-        $brands = Brand::has('products')->get();
-        $categories = Category::has('products')->get();
+        $brands = Brand::query()->has('products')->get();
+        $categories = Category::query()->has('products')->get();
 
         $products = Product::query()
             ->when(
