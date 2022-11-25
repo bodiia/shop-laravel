@@ -37,7 +37,7 @@ final class Price implements Stringable
 
     public function __toString(): string
     {
-        return number_format($this->getValue(), 2, ',', ' ')
+        return number_format($this->getValue(), 0, ',', ' ')
             . ' ' . $this->getCurrency()->symbol();
     }
 }

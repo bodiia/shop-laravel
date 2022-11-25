@@ -22,7 +22,7 @@ class SignInController extends Controller
     {
         if (! $action->handle(SignInUserDto::fromRequest($request))) {
             $errors = [
-                'email' => 'The provided credentials do not match our records.',
+                'email' => __('auth.failed'),
             ];
 
             return back()->withErrors($errors)->onlyInput('email');

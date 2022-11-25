@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Pipeline\Pipeline;
 use Support\Casts\PriceCast;
 use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
@@ -43,14 +44,10 @@ class Product extends Model
 
     public function scopeFiltered(Builder $query): void
     {
-        $query->when(request('filters.brands'), function (Builder $q) {
-            $q->whereIn('brand_id', request('filters.brands'));
-        })->when(request('filters.price'), function (Builder $q) {
-            $q->whereBetween('price', [
-                request('filters.price.from', 0) * 100,
-                request('filters.price.to', 100000) * 100,
-            ]);
-        });
+        app(Pipeline::class)
+            ->send($query)
+            ->through(filters())
+            ->thenReturn();
     }
 
     public function scopeSorted(Builder $query): void
@@ -80,6 +77,7 @@ class Product extends Model
     {
         return [
             'product_homepage',
+            'max_product_price',
         ];
     }
 

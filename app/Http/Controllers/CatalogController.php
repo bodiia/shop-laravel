@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
@@ -12,10 +11,9 @@ class CatalogController extends Controller
 {
     public function __invoke(?Category $category): View
     {
-        $brands = Brand::query()->has('products')->get();
         $categories = Category::query()->has('products')->get();
 
-        $products = Product::query()
+        $products = Product::query()->with('brand')
             ->when(
                 $category->exists,
                 fn (Builder $query)
@@ -30,11 +28,6 @@ class CatalogController extends Controller
             ->sorted()
             ->paginate(6);
 
-        $products->each(
-            fn (Product $product)
-                => $product->setRelation('brand', $brands->firstWhere('id', $product->brand_id))
-        );
-
-        return view('catalog.index', compact('brands', 'categories', 'category', 'products'));
+        return view('catalog.index', compact('category', 'categories', 'products'));
     }
 }

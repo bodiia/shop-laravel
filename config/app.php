@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -198,6 +198,7 @@ return [
         App\Providers\TestingServiceProvider::class,
         App\Providers\DomainServiceProvider::class,
         App\Providers\TelegramServiceProvider::class,
+        App\Providers\CatalogServiceProvider::class,
     ],
 
     /*
