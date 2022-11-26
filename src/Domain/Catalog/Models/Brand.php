@@ -49,6 +49,7 @@ class Brand extends Model
     {
         return [
             'brand_homepage',
+            'brands_filter',
         ];
     }
 

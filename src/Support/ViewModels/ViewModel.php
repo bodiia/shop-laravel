@@ -25,7 +25,7 @@ abstract class ViewModel implements Arrayable
                 return [$this->formattingKey($method) => $this->createVariableFromMethod($method)];
             });
 
-        return $methods->toArray();
+        return $methods->all();
     }
 
     private function formattingKey(ReflectionMethod $method): string

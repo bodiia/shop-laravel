@@ -29,11 +29,13 @@ final class BrandFilter extends AbstractFilter
 
     public function viewValues(): array
     {
-        return Brand::query()
-            ->has('products')
-            ->get()
-            ->pluck('title', 'id')
-            ->toArray();
+        return cache()->rememberForever('brands_filter', function () {
+            return Brand::query()
+                ->has('products')
+                ->get()
+                ->pluck('title', 'id')
+                ->toArray();
+        });
     }
 
     public function filterKeyInRequest(): string

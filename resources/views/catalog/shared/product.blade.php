@@ -4,7 +4,7 @@
         <img src="{{ $product->makeThumbnail('345x320') }}" class="object-cover w-full h-full" alt="{{ $product->title }}">
     </a>
     <div class="grow flex flex-col py-8 px-6">
-        <h3 class="text-sm lg:text-md font-black"><a href="#" class="inline-block text-white hover:text-pink">{{ $product->title }}</a></h3>
+        <h3 class="text-sm lg:text-md font-black"><a href="{{ route('product', $product) }}" class="inline-block text-white hover:text-pink">{{ $product->title }}</a></h3>
         <span class="text-xs">{{ $product->brand->title }}</span>
         <div class="mt-auto pt-6">
             <div class="mb-3 text-sm font-semibold">{{ $product->price }}</div>

@@ -6,6 +6,7 @@ use App\Contracts\RouteRegistrar;
 use App\Routing\AppRegistrar;
 use App\Routing\AuthRegistrar;
 use App\Routing\CatalogRegistrar;
+use App\Routing\ProductRegistrar;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class RouteServiceProvider extends ServiceProvider
         AppRegistrar::class,
         AuthRegistrar::class,
         CatalogRegistrar::class,
+        ProductRegistrar::class,
     ];
 
     public function boot(): void
