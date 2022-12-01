@@ -27,9 +27,9 @@ final class FilterManager
         return $this->filters;
     }
 
-    public function execute(Builder $query): void
+    public function execute(Builder $query): Builder
     {
-        app(Pipeline::class)
+        return app(Pipeline::class)
             ->send($query)
             ->through($this->getFilters())
             ->thenReturn();

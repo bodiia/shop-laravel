@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Support\ViewModels;
 
-use App\Models\Product;
 use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
+use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
 
 final class HomepageViewModel extends ViewModel

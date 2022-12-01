@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionProperty;
 
 abstract class ViewModel implements Arrayable
 {
@@ -25,12 +26,17 @@ abstract class ViewModel implements Arrayable
                 return [$this->formattingKey($method) => $this->createVariableFromMethod($method)];
             });
 
-        return $methods->all();
+        $properties = collect($class->getProperties(ReflectionProperty::IS_PUBLIC))
+            ->mapWithKeys(function (ReflectionProperty $property) {
+                return [$this->formattingKey($property) => $this->{ $property->getName() }];
+            });
+
+        return $methods->merge($properties)->all();
     }
 
-    private function formattingKey(ReflectionMethod $method): string
+    private function formattingKey(ReflectionMethod|ReflectionProperty $field): string
     {
-        return str($method->getName())->snake()->value();
+        return str($field->getName())->snake()->value();
     }
 
     private function shouldIgnore(ReflectionMethod $method): bool

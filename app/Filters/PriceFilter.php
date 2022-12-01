@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filters;
 
-use App\Models\Product;
 use Domain\Catalog\Filters\AbstractFilter;
+use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 use Support\ValueObjects\Price;
 

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static void execute(Builder $builder)
+ * @method static Builder execute(Builder $builder)
  */
 final class Filter extends Facade
 {

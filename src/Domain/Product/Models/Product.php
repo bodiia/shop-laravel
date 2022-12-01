@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Product\Models;
 
-use Domain\Catalog\Facades\Filter;
-use Domain\Catalog\Facades\Sorter;
 use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
-use Illuminate\Database\Eloquent\Builder;
+use Domain\Product\Builders\ProductBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,13 +13,18 @@ use Support\Casts\PriceCast;
 use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
 use Support\Traits\Models\HasThumbnail;
+use Support\Traits\Models\HomepageDisplay;
 
+/**
+ * @method static ProductBuilder query()
+ */
 class Product extends Model
 {
     use HasFactory;
     use HasSlug;
     use HasThumbnail;
     use Cacheable;
+    use HomepageDisplay;
 
     protected $fillable = [
         'title',
@@ -32,25 +35,16 @@ class Product extends Model
         'brand_id',
         'on_homepage',
         'sorting',
+        'json_properties',
     ];
 
     protected $casts = [
         'price' => PriceCast::class,
     ];
 
-    public function scopeHomepage(Builder $query): void
+    public function newEloquentBuilder($query): ProductBuilder
     {
-        $query->where('on_homepage', true)->orderBy('sorting')->limit(6);
-    }
-
-    public function scopeFiltered(Builder $query): void
-    {
-        Filter::execute($query);
-    }
-
-    public function scopeSorted(Builder $query): void
-    {
-        Sorter::execute($query);
+        return new ProductBuilder($query);
     }
 
     public function brand(): BelongsTo

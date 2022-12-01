@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static void execute(Builder $query)
+ * @method static Builder execute(Builder $query)
  * @see \Domain\Catalog\Sorters\Sorter
  */
 final class Sorter extends Facade

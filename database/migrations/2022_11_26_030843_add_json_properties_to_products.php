@@ -8,14 +8,14 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->json('json_attributes')->nullable();
+            $table->json('json_properties')->nullable();
         });
     }
 
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('json_attributes');
+            $table->dropColumn('json_properties');
         });
     }
 };

@@ -15,11 +15,11 @@ final class Sorter
     {
     }
 
-    public function execute(Builder $query): void
+    public function execute(Builder $query): Builder
     {
         $value = $this->getSortValueFromRequest();
 
-        $query->when(
+        return $query->when(
             $value->contains($this->columns),
             fn (Builder $q) => $q->orderBy(
                 $this->getColumnForSorting($value),
