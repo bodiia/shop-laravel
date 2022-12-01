@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Catalog\Filters;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pipeline\Pipeline;
+
 final class FilterManager
 {
     /**
@@ -22,5 +25,13 @@ final class FilterManager
     public function getFilters(): array
     {
         return $this->filters;
+    }
+
+    public function execute(Builder $query): void
+    {
+        app(Pipeline::class)
+            ->send($query)
+            ->through($this->getFilters())
+            ->thenReturn();
     }
 }

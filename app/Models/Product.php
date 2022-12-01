@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Domain\Catalog\Facades\Filter;
+use Domain\Catalog\Facades\Sorter;
 use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Pipeline\Pipeline;
 use Support\Casts\PriceCast;
 use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
@@ -44,23 +45,12 @@ class Product extends Model
 
     public function scopeFiltered(Builder $query): void
     {
-        app(Pipeline::class)
-            ->send($query)
-            ->through(filters())
-            ->thenReturn();
+        Filter::execute($query);
     }
 
     public function scopeSorted(Builder $query): void
     {
-        $query->when(request('sort'), function (Builder $q) {
-            $column = str(request('sort'));
-
-            if ($column->contains(['price', 'title'])) {
-                $direction = $column->contains('-') ? 'DESC' : 'ASC';
-
-                $q->orderBy((string) $column->remove('-'), $direction);
-            }
-        });
+        Sorter::execute($query);
     }
 
     public function brand(): BelongsTo

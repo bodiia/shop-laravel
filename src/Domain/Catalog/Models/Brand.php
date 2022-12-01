@@ -4,7 +4,6 @@ namespace Domain\Catalog\Models;
 
 use App\Models\Product;
 use Domain\Catalog\Builders\BrandBuilder;
-use Domain\Catalog\Collections\BrandCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,11 +28,6 @@ class Brand extends Model
         'on_homepage',
         'sorting',
     ];
-
-    public function newCollection(array $models = []): BrandCollection
-    {
-        return new BrandCollection($models);
-    }
 
     public function newEloquentBuilder($query): BrandBuilder
     {

@@ -4,7 +4,6 @@ namespace Domain\Catalog\Models;
 
 use App\Models\Product;
 use Domain\Catalog\Builders\CategoryBuilder;
-use Domain\Catalog\Collections\CategoryCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,11 +25,6 @@ class Category extends Model
         'on_homepage',
         'sorting',
     ];
-
-    public function newCollection(array $models = []): CategoryCollection
-    {
-        return new CategoryCollection($models);
-    }
 
     public function newEloquentBuilder($query): CategoryBuilder
     {
