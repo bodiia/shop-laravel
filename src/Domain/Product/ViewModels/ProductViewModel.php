@@ -12,11 +12,12 @@ final class ProductViewModel extends ViewModel
 {
     public function __construct(public Product $product)
     {
-        $this->product->load('optionValues.option');
     }
 
     public function options(): Collection
     {
+        $this->product->load('optionValues.option');
+
         return $this->product->optionValues->transformToKeyValuePairs();
     }
 

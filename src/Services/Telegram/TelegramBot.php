@@ -27,8 +27,10 @@ final class TelegramBot
             'text' => $message,
             'parse_mode' => self::PARSE_MODE_MARKDOWN,
         ];
-        $url = self::TELEGRAM_API . $this->token . self::SEND_MESSAGE_METHOD;
 
-        dispatch(new SendTelegramMessage($url, $options));
+        SendTelegramMessage::dispatch(
+            self::TELEGRAM_API . $this->token . self::SEND_MESSAGE_METHOD,
+            $options
+        );
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Domain\Product\Models;
 
+use App\Jobs\FillProductJsonPropertiesJob;
 use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
 use Domain\Product\Builders\ProductBuilder;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,7 +42,19 @@ class Product extends Model
 
     protected $casts = [
         'price' => PriceCast::class,
+        'json_properties' => AsArrayObject::class,
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        collect(['created', 'updated'])->each(static function (string $event) {
+            static::$event(static function (self $product) {
+                FillProductJsonPropertiesJob::dispatch($product)->delay(now()->addSeconds(10));
+            });
+        });
+    }
 
     public function newEloquentBuilder($query): ProductBuilder
     {
@@ -59,8 +73,7 @@ class Product extends Model
 
     public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class)
-            ->withPivot('value');
+        return $this->belongsToMany(Property::class)->withPivot('value');
     }
 
     public function optionValues(): BelongsToMany

@@ -9,7 +9,7 @@ trait Cacheable
     protected static function bootCacheable(): void
     {
         foreach (static::cacheFlushEvents() as $event) {
-            static::$event(fn () => cache()->deleteMultiple(static::cache()));
+            static::$event(static fn () => cache()->deleteMultiple(static::cache()));
         }
     }
 
