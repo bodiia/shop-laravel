@@ -7,7 +7,6 @@ namespace Domain\Catalog\ViewModels;
 use Domain\Catalog\Models\Category;
 use Domain\Product\Models\Product;
 use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Support\ViewModels\ViewModel;
 
@@ -27,8 +26,8 @@ final class CatalogViewModel extends ViewModel
         return Product::query()->with('brand')
             ->withCategory($this->category)
             ->withSearch(request('search'))
-            ->filtered()
-            ->sorted()
+            ->withFiltering()
+            ->withSorting()
             ->paginate(6);
     }
 }

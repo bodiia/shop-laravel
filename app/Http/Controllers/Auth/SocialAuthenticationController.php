@@ -23,9 +23,7 @@ class SocialAuthenticationController extends Controller
             'user' => Socialite::driver($driver)->user(),
         ];
 
-        $user = $action->handle(SocialAuthenticationDto::fromArray($data));
-
-        auth()->login($user);
+        auth()->login($action->handle(SocialAuthenticationDto::fromArray($data)));
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

@@ -2,20 +2,19 @@
 
 namespace Domain\Catalog\Models;
 
+use Domain\Catalog\Builders\CategoryBuilder;
 use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
-use Support\Traits\Models\HomepageDisplay;
 
 class Category extends Model
 {
     use HasFactory;
     use HasSlug;
     use Cacheable;
-    use HomepageDisplay;
 
     protected $fillable = [
         'title',
@@ -23,6 +22,11 @@ class Category extends Model
         'on_homepage',
         'sorting',
     ];
+
+    public function newEloquentBuilder($query): CategoryBuilder
+    {
+        return new CategoryBuilder($query);
+    }
 
     public function products(): BelongsToMany
     {

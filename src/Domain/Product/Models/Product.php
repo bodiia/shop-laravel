@@ -15,7 +15,6 @@ use Support\Casts\PriceCast;
 use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
 use Support\Traits\Models\HasThumbnail;
-use Support\Traits\Models\HomepageDisplay;
 
 /**
  * @method static ProductBuilder query()
@@ -26,7 +25,6 @@ class Product extends Model
     use HasSlug;
     use HasThumbnail;
     use Cacheable;
-    use HomepageDisplay;
 
     protected $fillable = [
         'title',

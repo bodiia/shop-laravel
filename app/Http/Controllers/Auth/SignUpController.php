@@ -19,9 +19,7 @@ class SignUpController extends Controller
 
     public function handle(SignUpRequest $request, SignUpUserAction $action): RedirectResponse
     {
-        $user = $action->handle(SignUpUserDto::fromRequest($request));
-
-        auth()->login($user);
+        auth()->login($action->handle(SignUpUserDto::fromRequest($request)));
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

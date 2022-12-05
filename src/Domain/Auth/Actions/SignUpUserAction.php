@@ -19,9 +19,7 @@ final class SignUpUserAction
             'password' => Hash::make($signupUserDto->password),
         ];
 
-        $user = User::query()->create($attributes);
-
-        event(new Registered($user));
+        event(new Registered($user = User::query()->create($attributes)));
 
         return $user;
     }

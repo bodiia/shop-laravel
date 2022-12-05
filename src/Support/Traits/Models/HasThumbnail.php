@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Support\Traits\Models;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use ReflectionClass;
 
 trait HasThumbnail
@@ -30,9 +31,8 @@ trait HasThumbnail
     {
         $reflection = new ReflectionClass($this);
 
-        return str($reflection->getShortName())
+        return (string) Str::of($reflection->getShortName())
             ->lower()
-            ->plural()
-            ->value();
+            ->plural();
     }
 }

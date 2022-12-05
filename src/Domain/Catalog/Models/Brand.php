@@ -2,22 +2,25 @@
 
 namespace Domain\Catalog\Models;
 
+use Domain\Catalog\Builders\BrandBuilder;
 use Domain\Product\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Support\Traits\Models\Cacheable;
 use Support\Traits\Models\HasSlug;
 use Support\Traits\Models\HasThumbnail;
-use Support\Traits\Models\HomepageDisplay;
 
+/**
+ * @method static Builder|BrandBuilder query()
+ */
 class Brand extends Model
 {
     use HasFactory;
     use HasSlug;
     use HasThumbnail;
     use Cacheable;
-    use HomepageDisplay;
 
     protected $fillable = [
         'slug',
@@ -26,6 +29,11 @@ class Brand extends Model
         'on_homepage',
         'sorting',
     ];
+
+    public function newEloquentBuilder($query): BrandBuilder
+    {
+        return new BrandBuilder($query);
+    }
 
     public function products(): HasMany
     {
