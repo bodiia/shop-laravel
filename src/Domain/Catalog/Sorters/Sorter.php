@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Domain\Catalog\Sorters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 
 final class Sorter
@@ -30,7 +32,7 @@ final class Sorter
 
     public function getSortValueFromRequest(): Stringable
     {
-        return str(request(self::SORT_KEY));
+        return Str::of(Request::input(self::SORT_KEY));
     }
 
     public function getDirection(Stringable $value): string

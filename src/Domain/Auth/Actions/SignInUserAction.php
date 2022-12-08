@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Domain\Auth\Actions;
 
 use Domain\Auth\DTO\SignInUserDto;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 final class SignInUserAction
 {
@@ -15,6 +17,6 @@ final class SignInUserAction
             'password' => $signInUserDto->password,
         ];
 
-        return auth()->attempt($credentials) && request()->session()->regenerate();
+        return Auth::attempt($credentials) && Request::session()->regenerate();
     }
 }

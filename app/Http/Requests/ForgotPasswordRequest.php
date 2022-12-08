@@ -3,12 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ForgotPasswordRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->guest();
+        return Auth::guest();
     }
 
     public function rules(): array

@@ -7,13 +7,14 @@ namespace App\Filters;
 use Domain\Catalog\Filters\AbstractFilter;
 use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Support\ValueObjects\Price;
 
 final class PriceFilter extends AbstractFilter
 {
     public function __construct()
     {
-        cache()->rememberForever('max_product_price', function () {
+        Cache::rememberForever('max_product_price', function () {
             $price = new Price(Product::query()->max('price') ?? 0);
 
             return ceil($price->getValue());
@@ -25,7 +26,7 @@ final class PriceFilter extends AbstractFilter
         return $query->when($this->filterValueFromRequest(), function (Builder $q) {
             $q->whereBetween('price', [
                 $this->filterValueFromRequest('from', 0) * 100,
-                $this->filterValueFromRequest('to', cache('max_product_price')) * 100,
+                $this->filterValueFromRequest('to', Cache::get('max_product_price')) * 100,
             ]);
         });
     }
@@ -44,7 +45,7 @@ final class PriceFilter extends AbstractFilter
     {
         return [
             'from' => 0,
-            'to' => cache('max_product_price'),
+            'to' => Cache::get('max_product_price'),
         ];
     }
 

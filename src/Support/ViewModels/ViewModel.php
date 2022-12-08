@@ -6,6 +6,7 @@ namespace Support\ViewModels;
 
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -36,12 +37,12 @@ abstract class ViewModel implements Arrayable
 
     private function formattingKey(ReflectionMethod|ReflectionProperty $field): string
     {
-        return str($field->getName())->snake()->value();
+        return Str::snake($field->getName());
     }
 
     private function shouldIgnore(ReflectionMethod $method): bool
     {
-        return str($method->getName())->startsWith('__') || in_array($method->getName(), static::IGNORED_METHODS);
+        return Str::startsWith($method->getName(), '__') || in_array($method->getName(), static::IGNORED_METHODS);
     }
 
     private function createVariableFromMethod(ReflectionMethod $method): mixed

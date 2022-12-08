@@ -7,6 +7,8 @@ use App\Providers\RouteServiceProvider;
 use Domain\Auth\Actions\SocialAuthenticationAction;
 use Domain\Auth\DTO\SocialAuthenticationDto;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthenticationController extends Controller
@@ -23,8 +25,8 @@ class SocialAuthenticationController extends Controller
             'user' => Socialite::driver($driver)->user(),
         ];
 
-        auth()->login($action->handle(SocialAuthenticationDto::fromArray($data)));
+        Auth::login($action->handle(SocialAuthenticationDto::fromArray($data)));
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return Redirect::intended(RouteServiceProvider::HOME);
     }
 }

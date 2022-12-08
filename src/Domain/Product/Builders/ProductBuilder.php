@@ -29,8 +29,7 @@ final class ProductBuilder extends Builder
     public function viewed(Product $current): ProductBuilder
     {
         return $this->where(
-            fn (Builder $query)
-                => $query->whereIn('id', Session::get('viewed_products', []))->where('id', '!=', $current->id)
+            fn (Builder $query) => $query->whereIn('id', Session::get('viewed_products', []))->where('id', '!=', $current->id)
         );
     }
 
@@ -38,8 +37,7 @@ final class ProductBuilder extends Builder
     {
         return $this->when(
             $category->exists,
-            fn (Builder $query)
-              => $query->whereRelation('categories', 'category_id', '=', $category->id)
+            fn (Builder $query) => $query->whereRelation('categories', 'category_id', '=', $category->id)
         );
     }
 
@@ -47,8 +45,7 @@ final class ProductBuilder extends Builder
     {
         return $this->when(
             $search,
-            fn (Builder $query)
-                => $query->whereFullText(['title', 'text'], $search)
+            fn (Builder $query) => $query->whereFullText(['title', 'text'], $search)
         );
     }
 }

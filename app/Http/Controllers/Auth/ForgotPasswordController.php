@@ -8,6 +8,7 @@ use Domain\Auth\Actions\ForgotPasswordAction;
 use Domain\Auth\DTO\ForgotPasswordDto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ForgotPasswordController extends Controller
@@ -24,11 +25,11 @@ class ForgotPasswordController extends Controller
         if ($status !== Password::RESET_LINK_SENT) {
             $errors = ['email' => __($status)];
 
-            return back()->withErrors($errors);
+            return Redirect::back()->withErrors($errors);
         }
 
         flash()->info(__($status));
 
-        return back();
+        return Redirect::back();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -31,6 +32,6 @@ class ThumbnailController extends Controller
             $image->save($storage->path($filepath));
         }
 
-        return response()->file($storage->path($filepath));
+        return Response::file($storage->path($filepath));
     }
 }

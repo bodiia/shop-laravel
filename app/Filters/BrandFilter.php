@@ -7,6 +7,7 @@ namespace App\Filters;
 use Domain\Catalog\Filters\AbstractFilter;
 use Domain\Catalog\Models\Brand;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 final class BrandFilter extends AbstractFilter
 {
@@ -29,7 +30,7 @@ final class BrandFilter extends AbstractFilter
 
     public function viewValues(): array
     {
-        return cache()->rememberForever('brands_filter', function () {
+        return Cache::rememberForever('brands_filter', function () {
             return Brand::query()
                 ->has('products')
                 ->get()

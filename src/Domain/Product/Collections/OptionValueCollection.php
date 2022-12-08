@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 
 final class OptionValueCollection extends BaseCollection
 {
-    public function transformToKeyValuePairs(): OptionValueCollection|Collection
+    public function transformToKeyValuePairs(): Collection|OptionValueCollection
     {
         return $this->mapToGroups(
             fn (OptionValue $value) => [$value->option->title => $value]

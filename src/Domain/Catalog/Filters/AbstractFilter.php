@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Catalog\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Stringable;
 
 abstract class AbstractFilter implements Stringable
@@ -34,7 +35,7 @@ abstract class AbstractFilter implements Stringable
 
     public function nameAttribute(string $nestedKey = null): string
     {
-        return str($this->filterKeyInRequest())
+        return Str::of($this->filterKeyInRequest())
             ->wrap('[', ']')
             ->prepend(static::ROOT_KEY)
             ->when($nestedKey, fn (Stringable $str) => $str->append("[$nestedKey]"))
@@ -43,9 +44,7 @@ abstract class AbstractFilter implements Stringable
 
     public function idAttribute(string $nestedKey = null): string
     {
-        return str($this->nameAttribute($nestedKey))
-            ->slug()
-            ->value();
+        return Str::slug($this->nameAttribute($nestedKey));
     }
 
     abstract public function apply(Builder $query): Builder;

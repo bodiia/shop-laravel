@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Menu;
 
+use Illuminate\Support\Facades\Request;
 use Support\Traits\Makeable;
 
 final class MenuItem
@@ -31,9 +32,9 @@ final class MenuItem
         $path = parse_url($this->getUrl(), PHP_URL_PATH) ?? '/';
 
         if ($path === '/') {
-            return request()->path() === $path;
+            return Request::path() === $path;
         }
 
-        return request()->fullUrlIs($this->getUrl() . '*');
+        return Request::fullUrlIs($this->getUrl() . '*');
     }
 }

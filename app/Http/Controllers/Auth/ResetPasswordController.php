@@ -8,6 +8,7 @@ use Domain\Auth\Actions\ResetPasswordAction;
 use Domain\Auth\DTO\ResetPasswordDto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ResetPasswordController extends Controller
@@ -24,11 +25,11 @@ class ResetPasswordController extends Controller
         if ($status !== Password::PASSWORD_RESET) {
             $errors = ['email' => __($status)];
 
-            return back()->withErrors($errors);
+            return Redirect::back()->withErrors($errors);
         }
 
         flash()->info(__($status));
 
-        return to_route('signin.index');
+        return Redirect::route('signin.index');
     }
 }

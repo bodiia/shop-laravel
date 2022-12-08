@@ -9,6 +9,7 @@ use Domain\Auth\Actions\LogoutUserAction;
 use Domain\Auth\Actions\SignInUserAction;
 use Domain\Auth\DTO\SignInUserDto;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class SignInController extends Controller
@@ -25,16 +26,16 @@ class SignInController extends Controller
                 'email' => __('auth.failed'),
             ];
 
-            return back()->withErrors($errors)->onlyInput('email');
+            return Redirect::back()->withErrors($errors)->onlyInput('email');
         }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return Redirect::intended(RouteServiceProvider::HOME);
     }
 
     public function logout(LogoutUserAction $action): RedirectResponse
     {
         $action->handle();
 
-        return redirect(RouteServiceProvider::HOME);
+        return Redirect::to(RouteServiceProvider::HOME);
     }
 }
