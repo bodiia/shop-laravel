@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Domain\Catalog\Filters;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Stringable;
+use Illuminate\Support\Stringable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Request;
 
-abstract class AbstractFilter implements Stringable
+abstract class AbstractFilter implements \Stringable
 {
     protected const ROOT_KEY = 'filters';
 
@@ -22,29 +23,27 @@ abstract class AbstractFilter implements Stringable
         return view($this->view(), ['filter' => $this])->render();
     }
 
-    public function filterValueFromRequest(string $nestedKey = null, mixed $default = null): mixed
+    public function filterValueFromRequest(string $nested = null, mixed $default = null): mixed
     {
-        $chain = implode('.', [static::ROOT_KEY, $this->filterKeyInRequest()]);
+        $chain = Str::of(static::ROOT_KEY)
+            ->append('.' . $this->filterKeyInRequest())
+            ->when($nested, fn (Stringable $str) => $str->append(".$nested"));
 
-        if (! is_null($nestedKey)) {
-            $chain .= ".$nestedKey";
-        }
-
-        return request($chain, $default);
+        return Request::input($chain, $default);
     }
 
-    public function nameAttribute(string $nestedKey = null): string
+    public function nameAttribute(string $nested = null): string
     {
         return Str::of($this->filterKeyInRequest())
             ->wrap('[', ']')
             ->prepend(static::ROOT_KEY)
-            ->when($nestedKey, fn (Stringable $str) => $str->append("[$nestedKey]"))
+            ->when($nested, fn (Stringable $str) => $str->append("[$nested]"))
             ->value();
     }
 
-    public function idAttribute(string $nestedKey = null): string
+    public function idAttribute(string $nested = null): string
     {
-        return Str::slug($this->nameAttribute($nestedKey));
+        return Str::slug($this->nameAttribute($nested));
     }
 
     abstract public function apply(Builder $query): Builder;

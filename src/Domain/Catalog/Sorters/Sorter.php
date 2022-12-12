@@ -21,13 +21,9 @@ final class Sorter
     {
         $value = $this->getSortValueFromRequest();
 
-        return $query->when(
-            $value->contains($this->columns),
-            fn (Builder $q) => $q->orderBy(
-                $this->getColumnForSorting($value),
-                $this->getDirection($value)
-            )
-        );
+        return $query->when($value->contains($this->columns), function (Builder $q) use ($value) {
+            $q->orderBy($this->getColumnForSorting($value), $this->getDirection($value));
+        });
     }
 
     public function getSortValueFromRequest(): Stringable

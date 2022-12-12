@@ -16,6 +16,8 @@ final class ProductBuilder extends Builder
 {
     use OnHomepage;
 
+    private const FULL_TEXT_COLUMNS = ['title', 'text'];
+
     public function withFiltering(): Builder|ProductBuilder
     {
         return Filter::execute($this);
@@ -28,24 +30,24 @@ final class ProductBuilder extends Builder
 
     public function viewed(Product $current): ProductBuilder
     {
-        return $this->where(
-            fn (Builder $query) => $query->whereIn('id', Session::get('viewed_products', []))->where('id', '!=', $current->id)
-        );
+        $viewed = Session::get('viewed_products', []);
+
+        return $this->where(function (Builder $query) use ($current, $viewed) {
+            $query->whereIn('id', $viewed)->where('id', '!=', $current->id);
+        });
     }
 
     public function withCategory(?Category $category): ProductBuilder
     {
-        return $this->when(
-            $category->exists,
-            fn (Builder $query) => $query->whereRelation('categories', 'category_id', '=', $category->id)
-        );
+        return $this->when($category->exists, function (Builder $query) use ($category) {
+            $query->whereRelation('categories', 'category_id', '=', $category->id);
+        });
     }
 
     public function withSearch(?string $search): ProductBuilder
     {
-        return $this->when(
-            $search,
-            fn (Builder $query) => $query->whereFullText(['title', 'text'], $search)
-        );
+        return $this->when($search, function (Builder $query) use ($search) {
+            $query->whereFullText(static::FULL_TEXT_COLUMNS, $search);
+        });
     }
 }

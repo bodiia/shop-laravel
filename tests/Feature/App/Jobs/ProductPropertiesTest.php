@@ -25,7 +25,7 @@ final class ProductPropertiesTest extends TestCase
         $this->assertEmpty($product->json_properties);
 
         Queue::swap($queue);
-        FillProductJsonPropertiesJob::dispatchSync($product);
+        FillProductJsonProperties::dispatchSync($product);
 
         $product->refresh();
 

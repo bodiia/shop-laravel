@@ -37,6 +37,7 @@ class Category extends Model
     {
         return [
             'category_homepage',
+            'categories',
         ];
     }
 

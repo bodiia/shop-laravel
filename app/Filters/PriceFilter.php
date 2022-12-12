@@ -12,9 +12,11 @@ use Support\ValueObjects\Price;
 
 final class PriceFilter extends AbstractFilter
 {
+    private float $maxProductPrice;
+
     public function __construct()
     {
-        Cache::rememberForever('max_product_price', function () {
+        $this->maxProductPrice = Cache::rememberForever('max_product_price', function () {
             $price = new Price(Product::query()->max('price') ?? 0);
 
             return ceil($price->getValue());
@@ -24,10 +26,12 @@ final class PriceFilter extends AbstractFilter
     public function apply(Builder $query): Builder
     {
         return $query->when($this->filterValueFromRequest(), function (Builder $q) {
-            $q->whereBetween('price', [
+            $range = [
                 $this->filterValueFromRequest('from', 0) * 100,
-                $this->filterValueFromRequest('to', Cache::get('max_product_price')) * 100,
-            ]);
+                $this->filterValueFromRequest('to', $this->maxProductPrice) * 100,
+            ];
+
+            $q->whereBetween('price', $range);
         });
     }
 
@@ -45,7 +49,7 @@ final class PriceFilter extends AbstractFilter
     {
         return [
             'from' => 0,
-            'to' => Cache::get('max_product_price'),
+            'to' => $this->maxProductPrice,
         ];
     }
 
