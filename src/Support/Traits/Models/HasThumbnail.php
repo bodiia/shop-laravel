@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Support\Traits\Models;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 use ReflectionClass;
 
 trait HasThumbnail
@@ -17,10 +14,10 @@ trait HasThumbnail
             'size' => $size,
             'method' => $method,
             'dirname' => $this->thumbnailDirectory(),
-            'filename' => File::basename($this->{ $this->thumbnail() }),
+            'filename' => basename($this->{ $this->thumbnail() }),
         ];
 
-        return URL::route('thumbnail', $params);
+        return url()->route('thumbnail', $params);
     }
 
     protected function thumbnail(): string
@@ -32,7 +29,7 @@ trait HasThumbnail
     {
         $reflection = new ReflectionClass($this);
 
-        return Str::of($reflection->getShortName())
+        return str($reflection->getShortName())
             ->lower()
             ->plural()
             ->value();

@@ -7,6 +7,7 @@ use App\Filters\PriceFilter;
 use Domain\Catalog\Filters\FilterManager;
 use Domain\Catalog\Sorters\Sorter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Cache\Repository as Cache;
 
 class CatalogServiceProvider extends ServiceProvider
 {
@@ -18,8 +19,8 @@ class CatalogServiceProvider extends ServiceProvider
     public function boot(): void
     {
         app(FilterManager::class)->registerFilters([
-            new PriceFilter(),
-            new BrandFilter(),
+            new PriceFilter(app(Cache::class)),
+            new BrandFilter(app(Cache::class)),
         ]);
 
         $this->app->bind(Sorter::class, function () {

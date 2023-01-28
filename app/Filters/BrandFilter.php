@@ -6,11 +6,15 @@ namespace App\Filters;
 
 use Domain\Catalog\Filters\AbstractFilter;
 use Domain\Catalog\Models\Brand;
+use Illuminate\Cache\Repository as Cache;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Cache;
 
 final class BrandFilter extends AbstractFilter
 {
+    public function __construct(private readonly Cache $cache)
+    {
+    }
+
     public function apply(Builder $query): Builder
     {
         return $query->when($this->filterValueFromRequest(), function (Builder $q) {
@@ -30,7 +34,7 @@ final class BrandFilter extends AbstractFilter
 
     public function viewValues(): array
     {
-        return Cache::rememberForever('brands_filter', function () {
+        return $this->cache->rememberForever('brands_filter', function () {
             return Brand::query()
                 ->has('products')
                 ->get()

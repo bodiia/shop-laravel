@@ -28,7 +28,7 @@ final class Sorter
 
     public function getSortValueFromRequest(): Stringable
     {
-        return Str::of(Request::input(self::SORT_KEY));
+        return str(request(self::SORT_KEY));
     }
 
     public function getDirection(Stringable $value): string

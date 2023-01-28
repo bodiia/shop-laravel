@@ -7,16 +7,16 @@ namespace App\Filters;
 use Domain\Catalog\Filters\AbstractFilter;
 use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Cache\Repository as Cache;
 use Support\ValueObjects\Price;
 
 final class PriceFilter extends AbstractFilter
 {
-    private float $maxProductPrice;
+    private readonly float $maxProductPrice;
 
-    public function __construct()
+    public function __construct(Cache $cache)
     {
-        $this->maxProductPrice = Cache::rememberForever('max_product_price', function () {
+        $this->maxProductPrice = $cache->rememberForever('max_product_price', function () {
             $price = new Price(Product::query()->max('price') ?? 0);
 
             return ceil($price->getValue());

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Support\Traits\Models;
 
-use Illuminate\Support\Facades\Cache;
-
 trait Cacheable
 {
     protected static function bootCacheable(): void
@@ -18,7 +16,7 @@ trait Cacheable
     private static function forgetMultiple(): void
     {
         foreach (static::cache() as $key) {
-            Cache::forget($key);
+            cache()->forget($key);
         }
     }
 

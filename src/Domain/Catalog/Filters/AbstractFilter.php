@@ -25,16 +25,16 @@ abstract class AbstractFilter implements \Stringable
 
     public function filterValueFromRequest(string $nested = null, mixed $default = null): mixed
     {
-        $chain = Str::of(static::ROOT_KEY)
+        $chain = str(static::ROOT_KEY)
             ->append('.' . $this->filterKeyInRequest())
             ->when($nested, fn (Stringable $str) => $str->append(".$nested"));
 
-        return Request::input($chain, $default);
+        return request($chain, $default);
     }
 
     public function nameAttribute(string $nested = null): string
     {
-        return Str::of($this->filterKeyInRequest())
+        return str($this->filterKeyInRequest())
             ->wrap('[', ']')
             ->prepend(static::ROOT_KEY)
             ->when($nested, fn (Stringable $str) => $str->append("[$nested]"))
@@ -43,7 +43,7 @@ abstract class AbstractFilter implements \Stringable
 
     public function idAttribute(string $nested = null): string
     {
-        return Str::slug($this->nameAttribute($nested));
+        return str($this->nameAttribute($nested))->slug();
     }
 
     abstract public function apply(Builder $query): Builder;

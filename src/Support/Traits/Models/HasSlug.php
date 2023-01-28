@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Support\Traits\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 trait HasSlug
 {
@@ -13,7 +12,7 @@ trait HasSlug
     {
         static::creating(static function (Model $model) {
             $model->slug = $model->generateUniqueSlug(
-                Str::slug($model->{ static::slugableField() })
+                str($model->{ static::slugableField() })->slug()->value()
             );
         });
     }
@@ -22,7 +21,7 @@ trait HasSlug
     {
         $uniqueSlugCandidate = $slug . ($matched > 0 ? "-$matched" : "");
 
-        $match = $this->query()->withoutGlobalScopes()
+        $match = $this->newQuery()->withoutGlobalScopes()
             ->where('slug', $uniqueSlugCandidate)
             ->exists();
 

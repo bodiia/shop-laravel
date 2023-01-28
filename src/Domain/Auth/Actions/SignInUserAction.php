@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Domain\Auth\Actions;
 
 use Domain\Auth\DTO\SignInUserDto;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
 final class SignInUserAction
 {
+    public function __construct(private readonly Session $session)
+    {
+    }
+
     public function handle(SignInUserDto $signInUserDto): bool
     {
         $credentials = [
@@ -17,6 +22,6 @@ final class SignInUserAction
             'password' => $signInUserDto->password,
         ];
 
-        return Auth::attempt($credentials) && Request::session()->regenerate();
+        return auth()->attempt($credentials) && $this->session->regenerate();
     }
 }

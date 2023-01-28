@@ -4,29 +4,43 @@ declare(strict_types=1);
 
 namespace Support\Testing;
 
+use Faker\Generator;
 use Faker\Provider\Base;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Support\Str;
 use SplFileInfo;
+use Symfony\Component\Finder\Finder;
 
 final class FakerImageProvider extends Base
 {
+    private readonly Filesystem $filesystem;
+
+    private readonly Finder $finder;
+
+    public function __construct(Generator $generator, FilesystemFactory $filesystem, Finder $finder)
+    {
+        parent::__construct($generator);
+
+        $this->filesystem = $filesystem->disk('images');
+        $this->finder = $finder;
+    }
+
     public function imageCopy(string $from, string $to): string
     {
-        $storage = Storage::disk('images');
-
-        if (! $storage->exists($to)) {
-            $storage->makeDirectory($to);
+        if (! $this->filesystem->exists($to)) {
+            $this->filesystem->makeDirectory($to);
         }
 
         /** @var SplFileInfo $file */
-        $file = self::randomElement(File::files(base_path('tests/Fixture/images' . DIRECTORY_SEPARATOR . $from)));
+        $file = self::randomElement(
+            $this->finder->files()->in(base_path('tests/Fixture/images' . DIRECTORY_SEPARATOR . $from))
+        );
         $filename = Str::random() . '.' . $file->getExtension();
 
-        File::copy(
+        copy(
             $file->getPathname(),
-            $storage->path($to . DIRECTORY_SEPARATOR . $filename),
+            $this->filesystem->path($to . DIRECTORY_SEPARATOR . $filename),
         );
 
         return implode(DIRECTORY_SEPARATOR, ['storage', $to, $filename]);

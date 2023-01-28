@@ -30,10 +30,10 @@ final class ProductBuilder extends Builder
 
     public function viewed(Product $current): ProductBuilder
     {
-        $viewed = Session::get('viewed_products', []);
-
-        return $this->where(function (Builder $query) use ($current, $viewed) {
-            $query->whereIn('id', $viewed)->where('id', '!=', $current->id);
+        return $this->where(function (Builder $query) use ($current) {
+            $query
+                ->whereIn('id', session('viewed_products', []))
+                ->where('id', '!=', $current->id);
         });
     }
 
@@ -47,7 +47,7 @@ final class ProductBuilder extends Builder
     public function withSearch(?string $search): ProductBuilder
     {
         return $this->when($search, function (Builder $query) use ($search) {
-            $query->whereFullText(static::FULL_TEXT_COLUMNS, $search);
+            $query->whereFullText(self::FULL_TEXT_COLUMNS, $search);
         });
     }
 }

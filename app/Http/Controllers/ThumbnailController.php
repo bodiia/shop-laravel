@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ThumbnailController extends Controller
 {
+    public function __construct(private readonly Filesystem $filesystem)
+    {
+    }
+
     public function __invoke(string $dirname, string $method, string $size, string $filename): BinaryFileResponse
     {
         abort_if(! in_array($size, config('thumbnail.allowed_sizes')), 403);
 
-        $storage = Storage::disk('images');
+        $storage = $this->filesystem->disk('images');
 
         $path = implode(DIRECTORY_SEPARATOR, [$dirname, $filename]);
         $dirpath = implode(DIRECTORY_SEPARATOR, [$dirname, $method, $size]);
@@ -32,6 +36,6 @@ class ThumbnailController extends Controller
             $image->save($storage->path($filepath));
         }
 
-        return Response::file($storage->path($filepath));
+        return response()->file($storage->path($filepath));
     }
 }

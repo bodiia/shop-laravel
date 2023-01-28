@@ -8,8 +8,6 @@ use App\Providers\RouteServiceProvider;
 use Domain\Auth\Actions\SignUpUserAction;
 use Domain\Auth\DTO\SignUpUserDto;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class SignUpController extends Controller
@@ -21,8 +19,8 @@ class SignUpController extends Controller
 
     public function handle(SignUpRequest $request, SignUpUserAction $action): RedirectResponse
     {
-        Auth::login($action->handle(SignUpUserDto::fromRequest($request)));
+        auth()->login($action->handle(SignUpUserDto::fromRequest($request)));
 
-        return Redirect::intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

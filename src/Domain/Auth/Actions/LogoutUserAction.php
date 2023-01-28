@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Domain\Auth\Actions;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Contracts\Session\Session;
 
 final class LogoutUserAction
 {
+    public function __construct(private readonly Session $session)
+    {
+    }
+
     public function handle(): void
     {
-        Auth::logout();
-        Request::session()->invalidate();
-        Request::session()->regenerateToken();
+        auth()->logout();
+        $this->session->invalidate();
+        $this->session->regenerateToken();
     }
 }
