@@ -6,8 +6,6 @@ namespace Domain\Auth\Actions;
 
 use Domain\Auth\DTO\SignInUserDto;
 use Illuminate\Contracts\Session\Session;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 
 final class SignInUserAction
 {

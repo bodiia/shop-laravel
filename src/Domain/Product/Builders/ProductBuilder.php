@@ -9,7 +9,6 @@ use Domain\Catalog\Facades\Sorter;
 use Domain\Catalog\Models\Category;
 use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Session;
 use Support\Traits\Models\OnHomepage;
 
 final class ProductBuilder extends Builder

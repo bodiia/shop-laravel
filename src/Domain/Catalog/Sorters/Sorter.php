@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Domain\Catalog\Sorters;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 
 final class Sorter

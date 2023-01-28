@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Catalog\Filters;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Request;
 
 abstract class AbstractFilter implements \Stringable
 {
