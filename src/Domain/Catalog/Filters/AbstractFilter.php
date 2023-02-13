@@ -25,7 +25,8 @@ abstract class AbstractFilter implements \Stringable
     {
         $chain = str(static::ROOT_KEY)
             ->append('.' . $this->filterKeyInRequest())
-            ->when($nested, fn (Stringable $str) => $str->append(".$nested"));
+            ->when($nested, fn (Stringable $str) => $str->append(".$nested"))
+            ->value();
 
         return request($chain, $default);
     }
@@ -41,7 +42,7 @@ abstract class AbstractFilter implements \Stringable
 
     public function idAttribute(string $nested = null): string
     {
-        return str($this->nameAttribute($nested))->slug();
+        return str($this->nameAttribute($nested))->slug()->value();
     }
 
     abstract public function apply(Builder $query): Builder;

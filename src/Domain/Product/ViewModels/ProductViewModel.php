@@ -23,7 +23,8 @@ final class ProductViewModel extends ViewModel
 
     public function viewed(): Collection
     {
-        return Product::query()->viewed(current: $this->product)
+        return Product::query()
+            ->viewed(current: $this->product)
             ->with('brand')
             ->get();
     }

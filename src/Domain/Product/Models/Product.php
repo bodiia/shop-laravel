@@ -49,7 +49,7 @@ class Product extends Model
 
         collect(['created', 'updated'])->each(static function (string $event) {
             static::$event(static function (self $product) {
-                FillProductJsonProperties::dispatch($product)->delay(now()->addSeconds(10));
+                dispatch(new FillProductJsonProperties($product))->delay(now()->addSeconds(10));
             });
         });
     }
