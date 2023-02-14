@@ -14,10 +14,10 @@ final class CartRegistrar implements RouteRegistrar
     {
         Route::middleware('web')->group(function () {
             Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-
             Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
-
             Route::delete('/cart/truncate', [CartController::class, 'truncate'])->name('cart.truncate');
+            Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.product_destroy');
+            Route::patch('/cart/{cartItem}/quantity', [CartController::class, 'quantity'])->name('cart.product_quantity');
         });
     }
 }

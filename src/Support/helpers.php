@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Domain\Auth\Models\User;
+use Domain\Cart\Models\Cart;
+use Domain\Cart\Services\CartService;
 use Domain\Catalog\Filters\FilterManager;
 use Domain\Catalog\Models\Category;
 use Support\Flash\Flash;
@@ -35,5 +38,12 @@ if (! function_exists('filter_url')) {
             ...$queryParams,
             'category' => $category,
         ]);
+    }
+}
+
+if (! function_exists('get_current_cart')) {
+    function get_current_cart(?User $user): ?Cart
+    {
+        return app(CartService::class)->getCartForCurrentUser($user);
     }
 }

@@ -4,11 +4,13 @@ namespace Domain\Cart\Models;
 
 use Domain\Product\Models\OptionValue;
 use Domain\Product\Models\Product;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Support\Casts\PriceCast;
+use Support\ValueObjects\Price;
 
 class CartItem extends Model
 {
@@ -21,6 +23,13 @@ class CartItem extends Model
         'quantity',
         'stringify_option_values',
     ];
+
+    public function amountPrice(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => new Price($this->price->getRaw() * $this->quantity)
+        );
+    }
 
     protected $casts = [
         'price' => PriceCast::class,
