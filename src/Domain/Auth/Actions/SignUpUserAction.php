@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Hash;
 
 final class SignUpUserAction
 {
-    public function handle(SignUpUserDto $signupUserDto): User
+    public function __construct(private readonly SessionRegenerateAction $regenerateAction)
+    {
+    }
+
+    public function handle(SignUpUserDto $signupUserDto): void
     {
         $attributes = [
             'name' => $signupUserDto->name,
@@ -21,6 +25,6 @@ final class SignUpUserAction
 
         event(new Registered($user = User::query()->create($attributes)));
 
-        return $user;
+        $this->regenerateAction->handle(fn () => auth()->login($user));
     }
 }

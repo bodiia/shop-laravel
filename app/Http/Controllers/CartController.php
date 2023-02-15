@@ -18,9 +18,9 @@ class CartController extends Controller
     ) {
     }
 
-    public function index(Request $request): View
+    public function index(): View
     {
-        $cart = $this->cartService->findOrCreateCart($request->user())
+        $cart = $this->cartService->findOrCreateCart()
             ->load(['cartItems.optionValues.option', 'cartItems.product']);
 
         return view('cart.index', compact('cart'));
@@ -30,12 +30,11 @@ class CartController extends Controller
     {
         $this->cartService->storeProductToCart(
             CartProductDto::fromArray([...$request->validated(),
-                'current_user_id' => $request->user(),
                 'product' => Product::query()->find($request->validated('product_id')),
             ])
         );
 
-        return back();
+        return to_route('cart.index');
     }
 
     public function quantity(CartItem $cartItem, Request $request): RedirectResponse
@@ -57,9 +56,9 @@ class CartController extends Controller
         return back();
     }
 
-    public function truncate(Request $request): RedirectResponse
+    public function truncate(): RedirectResponse
     {
-        $this->cartService->truncateCart($request->user());
+        $this->cartService->truncateCart();
 
         return back();
     }

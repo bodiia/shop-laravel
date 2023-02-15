@@ -21,36 +21,44 @@ final class CartService
     ) {
     }
 
-    public function createCart(?User $currentUser): Cart|Model
+    private function prepareAttributes(string $sessionId): array
     {
         $attributes = [
-            'session_id' => $this->session->getId(),
-            'user_id' => $currentUser?->id,
+            'session_id' => $sessionId
         ];
 
-        return Cart::query()->create($attributes);
+        if (auth()->check()) {
+            $attributes['user_id'] = auth()->user()->id;
+        }
+
+        return $attributes;
     }
 
-    public function getCartForCurrentUser(?User $currentUser): Cart|Model|null
+    public function createCart(): Cart|Model
     {
-        return $this->cache->remember('session_' . $this->session->getId(), now()->addHour(), function () use ($currentUser) {
+        return Cart::query()->create($this->prepareAttributes($this->session->getId()));
+    }
+
+    public function getCartForCurrentUser(?User $user): Cart|Model|null
+    {
+        return $this->cache->remember('session_' . $this->session->getId(), now()->addHour(), function () use ($user) {
             return Cart::query()
                 ->when(
-                    $currentUser,
-                    fn (Builder $query) => $query->where('user_id', '=', $currentUser->id),
+                    $user,
+                    fn (Builder $query) => $query->where('user_id', '=', $user->getKey()),
                     fn (Builder $query) => $query->where('session_id', '=', $this->session->getId()),
                 )->first();
         });
     }
 
-    public function findOrCreateCart(?User $currentUser): Cart|Model
+    public function findOrCreateCart(): Cart|Model
     {
-        return $this->getCartForCurrentUser($currentUser) ?? $this->createCart($currentUser);
+        return $this->getCartForCurrentUser(auth()->user()) ?? $this->createCart();
     }
 
     public function storeProductToCart(CartProductDto $dto): CartItem|Model
     {
-        $cart = $this->findOrCreateCart($dto->currentUser);
+        $cart = $this->findOrCreateCart();
 
         /** @var CartItem $createdCartItem */
         $createdCartItem = $cart->cartItems()->updateOrCreate(
@@ -79,8 +87,13 @@ final class CartService
         return $cartItem->delete();
     }
 
-    public function truncateCart(?User $user): int
+    public function truncateCart(): int
     {
-        return $this->getCartForCurrentUser($user)?->cartItems()->delete();
+        return $this->getCartForCurrentUser(auth()->user())?->cartItems()->delete();
+    }
+
+    public function updateSessionId(string $old, string $new): void
+    {
+        Cart::query()->where('session_id', '=', $old)->update($this->prepareAttributes($new));
     }
 }

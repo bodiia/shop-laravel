@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Hash;
 
 final class SocialAuthenticationAction
 {
-    public function handle(SocialAuthenticationDto $authenticationDto): User
+    public function __construct(private readonly SessionRegenerateAction $regenerateAction)
+    {
+    }
+
+    public function handle(SocialAuthenticationDto $authenticationDto): void
     {
         $attributes = [
             'name' => $authenticationDto->user->getName() ?? $authenticationDto->user->getNickname(),
@@ -18,9 +22,11 @@ final class SocialAuthenticationAction
             'password' => Hash::make($authenticationDto->user->getEmail()),
         ];
 
-        return User::query()->updateOrCreate(
+        $user = User::query()->updateOrCreate(
             [$authenticationDto->socialType . '_id' => $authenticationDto->user->getId()],
             $attributes
         );
+
+        $this->regenerateAction->handle(fn () => auth()->login($user));
     }
 }
