@@ -43,17 +43,6 @@ class Product extends Model
         'json_properties' => AsArrayObject::class,
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        collect(['created', 'updated'])->each(static function (string $event) {
-            static::$event(static function (self $product) {
-                dispatch(new FillProductJsonProperties($product))->delay(now()->addSeconds(10));
-            });
-        });
-    }
-
     public function newEloquentBuilder($query): ProductBuilder
     {
         return new ProductBuilder($query);

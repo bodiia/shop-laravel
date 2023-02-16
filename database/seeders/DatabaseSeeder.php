@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\FillProductJsonProperties;
 use Database\Factories\BrandFactory;
 use Database\Factories\CategoryFactory;
 use Database\Factories\OptionFactory;
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
                     ->hasAttached($properties, function () {
                         return ['value' => ucfirst(fake()->word())];
                     })
+                    ->afterCreating(fn ($product) => dispatch(new FillProductJsonProperties($product)))
             )
             ->create();
 
@@ -41,6 +43,7 @@ class DatabaseSeeder extends Seeder
                     ->hasAttached($properties, function () {
                         return ['value' => ucfirst(fake()->word())];
                     })
+                    ->afterCreating(fn ($product) => dispatch(new FillProductJsonProperties($product)))
             )
             ->create();
     }
