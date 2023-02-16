@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Domain\Auth\Actions;
 
+use Illuminate\Contracts\Auth\StatefulGuard as Auth;
 use Domain\Auth\DTO\SignInUserDto;
 
 final class SignInUserAction
 {
     public function __construct(
+        private readonly Auth $auth,
         private readonly SessionRegenerateAction $regenerateAction
     ) {
     }
@@ -20,7 +22,7 @@ final class SignInUserAction
             'password' => $signInUserDto->password,
         ];
 
-        if ($attempt = auth()->attempt($credentials)) {
+        if ($attempt = $this->auth->attempt($credentials)) {
             $this->regenerateAction->handle();
         }
 

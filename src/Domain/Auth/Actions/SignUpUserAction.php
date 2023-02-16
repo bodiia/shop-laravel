@@ -6,13 +6,16 @@ namespace Domain\Auth\Actions;
 
 use Domain\Auth\DTO\SignUpUserDto;
 use Domain\Auth\Models\User;
+use Illuminate\Contracts\Auth\StatefulGuard as Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 
 final class SignUpUserAction
 {
-    public function __construct(private readonly SessionRegenerateAction $regenerateAction)
-    {
+    public function __construct(
+        private readonly Auth $auth,
+        private readonly SessionRegenerateAction $regenerateAction
+    ) {
     }
 
     public function handle(SignUpUserDto $signupUserDto): void
@@ -25,6 +28,6 @@ final class SignUpUserAction
 
         event(new Registered($user = User::query()->create($attributes)));
 
-        $this->regenerateAction->handle(fn () => auth()->login($user));
+        $this->regenerateAction->handle(fn () => $this->auth->login($user));
     }
 }

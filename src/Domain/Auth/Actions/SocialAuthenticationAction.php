@@ -6,12 +6,15 @@ namespace Domain\Auth\Actions;
 
 use Domain\Auth\DTO\SocialAuthenticationDto;
 use Domain\Auth\Models\User;
+use Illuminate\Contracts\Auth\StatefulGuard as Auth;
 use Illuminate\Support\Facades\Hash;
 
 final class SocialAuthenticationAction
 {
-    public function __construct(private readonly SessionRegenerateAction $regenerateAction)
-    {
+    public function __construct(
+        private readonly Auth $auth,
+        private readonly SessionRegenerateAction $regenerateAction
+    ) {
     }
 
     public function handle(SocialAuthenticationDto $authenticationDto): void
@@ -27,6 +30,6 @@ final class SocialAuthenticationAction
             $attributes
         );
 
-        $this->regenerateAction->handle(fn () => auth()->login($user));
+        $this->regenerateAction->handle(fn () => $this->auth->login($user));
     }
 }

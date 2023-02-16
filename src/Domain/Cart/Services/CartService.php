@@ -8,6 +8,7 @@ use Domain\Auth\Models\User;
 use Domain\Cart\DTOs\CartProductDto;
 use Domain\Cart\Models\Cart;
 use Domain\Cart\Models\CartItem;
+use Illuminate\Contracts\Auth\StatefulGuard as Auth;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,8 +17,9 @@ use Illuminate\Database\Eloquent\Model;
 final class CartService
 {
     public function __construct(
-        private readonly Session $session,
-        private readonly Cache $cache
+        private readonly Auth $auth,
+        private readonly Cache $cache,
+        private readonly Session $session
     ) {
     }
 
@@ -27,8 +29,8 @@ final class CartService
             'session_id' => $sessionId
         ];
 
-        if (auth()->check()) {
-            $attributes['user_id'] = auth()->user()->id;
+        if ($this->auth->check()) {
+            $attributes['user_id'] = $this->auth->id();
         }
 
         return $attributes;
@@ -89,7 +91,7 @@ final class CartService
 
     public function truncateCart(): int
     {
-        return $this->getCartForCurrentUser(auth()->user())?->cartItems()->delete();
+        return $this->getCartForCurrentUser($this->auth->user())?->cartItems()->delete();
     }
 
     public function updateSessionId(string $old, string $new): void

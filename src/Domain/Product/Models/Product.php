@@ -2,7 +2,6 @@
 
 namespace Domain\Product\Models;
 
-use App\Jobs\FillProductJsonProperties;
 use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
 use Domain\Product\Builders\ProductBuilder;
