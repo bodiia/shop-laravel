@@ -55,7 +55,7 @@ final class CartService
 
     public function findOrCreateCart(): Cart|Model
     {
-        return $this->getCartForCurrentUser(auth()->user()) ?? $this->createCart();
+        return $this->getCartForCurrentUser($this->auth->user()) ?? $this->createCart();
     }
 
     public function storeProductToCart(CartProductDto $dto): CartItem|Model

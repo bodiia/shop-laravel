@@ -16,14 +16,11 @@ final class FakerImageProvider extends Base
 {
     private readonly Filesystem $filesystem;
 
-    private readonly Finder $finder;
-
-    public function __construct(Generator $generator, FilesystemFactory $filesystem, Finder $finder)
+    public function __construct(Generator $generator, FilesystemFactory $filesystem)
     {
         parent::__construct($generator);
 
         $this->filesystem = $filesystem->disk('images');
-        $this->finder = $finder;
     }
 
     public function imageCopy(string $from, string $to): string
@@ -34,7 +31,7 @@ final class FakerImageProvider extends Base
 
         /** @var SplFileInfo $file */
         $file = self::randomElement(
-            $this->finder->files()->in(base_path('tests/Fixture/images' . DIRECTORY_SEPARATOR . $from))
+            app(Finder::class)->files()->in(base_path('tests/Fixture/images' . DIRECTORY_SEPARATOR . $from))
         );
         $filename = Str::random() . '.' . $file->getExtension();
 

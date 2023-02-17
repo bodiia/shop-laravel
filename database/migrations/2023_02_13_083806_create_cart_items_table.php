@@ -49,6 +49,7 @@ return new class () extends Migration {
 
     public function down()
     {
+        Schema::dropIfExists('cart_item_option_value');
         Schema::dropIfExists('cart_items');
     }
 };

@@ -29,8 +29,9 @@ class CartController extends Controller
     public function store(StoreProductToCartRequest $request): RedirectResponse
     {
         $this->cartService->storeProductToCart(
-            CartProductDto::fromArray([...$request->validated(),
-                'product' => Product::query()->find($request->validated('product_id')),
+            CartProductDto::fromArray([
+                ...$request->validated(),
+                'product' => Product::query()->find($request->validated('product_id'))
             ])
         );
 

@@ -6,7 +6,6 @@ use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Support\ServiceProvider;
 use Support\Testing\FakerImageProvider;
-use Symfony\Component\Finder\Finder;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 
 class TestingServiceProvider extends ServiceProvider
@@ -17,8 +16,7 @@ class TestingServiceProvider extends ServiceProvider
             $faker = Factory::create();
             $faker->addProvider(new FakerImageProvider(
                 $faker,
-                app(Filesystem::class),
-                app(Finder::class)
+                app(Filesystem::class)
             ));
 
             return $faker;
