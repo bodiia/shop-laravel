@@ -35,10 +35,10 @@
                                 <td scope="row" class="py-4 px-4 md:px-6 rounded-l-2xl bg-card">
                                     <div class="flex flex-col lg:flex-row min-w-[200px] gap-2 lg:gap-6">
                                         <div class="shrink-0 overflow-hidden w-[64px] lg:w-[84px] h-[64px] lg:h-[84px] rounded-2xl">
-                                            <img src="{{ $cartItem->product->makeThumbnail('345x320') }}" class="object-cover w-full h-full" alt="SteelSeries Aerox 3 Snow">
+                                            <img src="{{ $cartItem->product->makeThumbnail('345x320') }}" class="object-cover w-full h-full" alt="{{ $cartItem->product->title }}">
                                         </div>
                                         <div class="py-3">
-                                            <h4 class="text-xs sm:text-sm xl:text-md font-bold"><a href="{{ route('product', $cartItem->product) }}" class="inline-block text-white hover:text-pink">SteelSeries Aerox 3 Snow</a></h4>
+                                            <h4 class="text-xs sm:text-sm xl:text-md font-bold"><a href="{{ route('product', $cartItem->product) }}" class="inline-block text-white hover:text-pink">{{ $cartItem->product->title }}</a></h4>
                                             <ul class="space-y-1 mt-2 text-xs">
                                                 @foreach($cartItem->optionValues as $optionValue)
                                                     <li class="text-body">{{ $optionValue->option->title }}: {{ $optionValue->title }}</li>
