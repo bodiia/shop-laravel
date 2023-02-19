@@ -9,14 +9,20 @@ use Domain\Auth\DTO\ResetPasswordDto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
+use Spatie\RouteAttributes\Attributes\Get;
+use Spatie\RouteAttributes\Attributes\Middleware;
+use Spatie\RouteAttributes\Attributes\Post;
 
+#[Middleware(['web', 'guest'])]
 class ResetPasswordController extends Controller
 {
+    #[Get(uri: '/reset-password/{token}', name: 'password.reset')]
     public function index(string $token): View
     {
         return view('auth.reset-password', ['token' => $token]);
     }
 
+    #[Post(uri: '/reset-password', name: 'password.reset.handle')]
     public function handle(ResetPasswordRequest $request, ResetPasswordAction $action): RedirectResponse
     {
         $status = $action->handle(ResetPasswordDto::fromRequest($request));

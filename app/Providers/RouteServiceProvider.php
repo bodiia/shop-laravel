@@ -2,12 +2,6 @@
 
 namespace App\Providers;
 
-use App\Contracts\RouteRegistrar;
-use App\Routing\AppRegistrar;
-use App\Routing\AuthRegistrar;
-use App\Routing\CartRegistrar;
-use App\Routing\CatalogRegistrar;
-use App\Routing\ProductRegistrar;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -18,24 +12,9 @@ class RouteServiceProvider extends ServiceProvider
 {
     public const HOME = '/';
 
-    protected array $registrars = [
-        AppRegistrar::class,
-        AuthRegistrar::class,
-        CatalogRegistrar::class,
-        ProductRegistrar::class,
-        CartRegistrar::class,
-    ];
-
     public function boot(): void
     {
         $this->configureRateLimiting();
-    }
-
-    public function map(): void
-    {
-        collect($this->registrars)
-            ->map(fn (string $routeClass) => new $routeClass())
-            ->each(fn (RouteRegistrar $route) => $route->map());
     }
 
     protected function configureRateLimiting(): void

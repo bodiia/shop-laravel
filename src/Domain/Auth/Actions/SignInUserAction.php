@@ -22,10 +22,8 @@ final class SignInUserAction
             'password' => $signInUserDto->password,
         ];
 
-        if ($attempt = $this->auth->attempt($credentials)) {
-            $this->regenerateAction->handle();
-        }
+        $this->regenerateAction->handle(fn () => $this->auth->attempt($credentials));
 
-        return $attempt;
+        return $this->auth->check();
     }
 }
