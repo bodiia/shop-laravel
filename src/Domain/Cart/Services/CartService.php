@@ -36,6 +36,11 @@ final class CartService
         return $attributes;
     }
 
+    private function getCacheKeyForCart(): string
+    {
+        return 'session_' . $this->session->getId();
+    }
+
     public function createCart(): Cart|Model
     {
         return Cart::query()->create($this->prepareAttributes($this->session->getId()));
@@ -43,7 +48,7 @@ final class CartService
 
     public function getCartForCurrentUser(?User $user): Cart|Model|null
     {
-        return $this->cache->remember('session_' . $this->session->getId(), now()->addHour(), function () use ($user) {
+        return $this->cache->remember($this->getCacheKeyForCart(), now()->addHour(), function () use ($user) {
             return Cart::query()
                 ->when(
                     $user,
@@ -89,7 +94,7 @@ final class CartService
         return $cartItem->delete();
     }
 
-    public function truncateCart(): int
+    public function truncateCart(): ?int
     {
         return $this->getCartForCurrentUser($this->auth->user())?->cartItems()->delete();
     }

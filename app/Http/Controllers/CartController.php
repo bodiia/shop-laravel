@@ -19,9 +19,8 @@ use Spatie\RouteAttributes\Attributes\Post;
 #[Middleware('web')]
 class CartController extends Controller
 {
-    public function __construct(
-        private readonly CartService $cartService
-    ) {
+    public function __construct(private readonly CartService $cartService)
+    {
     }
 
     #[Get(uri: '/cart', name: 'cart.index')]
