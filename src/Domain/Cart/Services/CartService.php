@@ -65,10 +65,8 @@ final class CartService
 
     public function storeProductToCart(CartProductDto $dto): CartItem|Model
     {
-        $cart = $this->findOrCreateCart();
-
         /** @var CartItem $createdCartItem */
-        $createdCartItem = $cart->cartItems()->updateOrCreate(
+        $createdCartItem = $this->findOrCreateCart()->cartItems()->updateOrCreate(
             [
                 'product_id' => $dto->product->id,
                 'stringify_option_values' => collect($dto->optionValues)->sort()->join(':'),
